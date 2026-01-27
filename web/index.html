@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok B2B 工厂出口信息平台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Professional B2B Color Palette */
+      --primary: #2563eb;
+      --primary-dark: #1e40af;
+      --primary-light: #3b82f6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+
+      /* Neutral Colors - Light Mode */
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-tertiary: #94a3b8;
+      --border: #e2e8f0;
+      --border-light: #f1f5f9;
+
+      /* Spacing Scale */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 48px;
+
+      /* Border Radius */
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+      --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+
+      /* Transitions */
+      --transition-fast: 150ms ease;
+      --transition-base: 200ms ease;
+      --transition-slow: 300ms ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Header */
+    .header {
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: var(--space-md) var(--space-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .logo-text h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .logo-text p {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: var(--space-lg);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: var(--radius-xl);
+      padding: var(--space-2xl) var(--space-xl);
+      color: white;
+      margin-bottom: var(--space-xl);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .hero-content {
+      max-width: 600px;
+    }
+
+    .hero h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: var(--space-md);
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 16px;
+      opacity: 0.95;
+      margin-bottom: var(--space-lg);
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-bottom: var(--space-xs);
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    /* Section */
+    .section {
+      background: var(--bg-primary);
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-lg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-lg);
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* Search Bar */
+    .search-container {
+      display: flex;
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 12px var(--space-md);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-family: inherit;
+      transition: border-color var(--transition-base);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .btn {
+      padding: 12px var(--space-lg);
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition-base);
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Industry Grid */
+    .industry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: var(--space-md);
+    }
+
+    .industry-card {
+      background: var(--bg-secondary);
+      border: 2px solid transparent;
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-base);
+    }
+
+    .industry-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .industry-card.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .industry-icon {
+      font-size: 36px;
+      margin-bottom: var(--space-sm);
+    }
+
+    .industry-name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* Overview Cards */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-md);
+    }
+
+    .overview-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      border: 1px solid var(--border);
+    }
+
+    .overview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-md);
+    }
+
+    .region-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .region-flag {
+      font-size: 24px;
+    }
+
+    .overview-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+
+    .stat-box {
+      text-align: center;
+    }
+
+    .stat-box .label {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-xs);
+    }
+
+    .stat-box .value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .recommendation {
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-sm);
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .recommendation.high {
+      background: #f0fdf4;
+      color: var(--success);
+      border: 1px solid #bbf7d0;
+    }
+
+    .recommendation.medium {
+      background: #eff6ff;
+      color: var(--primary);
+      border: 1px solid #bfdbfe;
+    }
+
+    .recommendation.low {
+      background: #fffbeb;
+      color: var(--warning);
+      border: 1px solid #fde68a;
+    }
+
+    /* Factory Grid */
+    .factory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: var(--space-lg);
+    }
+
+    .factory-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all var(--transition-base);
+    }
+
+    .factory-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .factory-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .factory-content {
+      padding: var(--space-md);
+    }
+
+    .factory-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-md);
+    }
+
+    .factory-info h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: var(--space-xs);
+    }
+
+    .factory-tags {
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      padding: 4px var(--space-sm);
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .tag.hot {
+      background: linear-gradient(135deg, var(--danger), #f87171);
+      color: white;
+    }
+
+    .export-score {
+      text-align: center;
+      padding: var(--space-sm);
+      background: #eff6ff;
+      border-radius: var(--radius-md);
+      min-width: 80px;
+    }
+
+    .score-label {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      font-weight: 500;
+    }
+
+    .score-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .factory-export {
+      display: flex;
+      align-items: center;
+      padding: var(--space-sm);
+      background: var(--bg-primary);
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-md);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .factory-stats {
+      display: flex;
+      justify-content: space-around;
+      padding: var(--space-md) 0;
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: var(--space-md);
+    }
+
+    .factory-stat {
+      text-align: center;
+    }
+
+    .factory-stat .value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .factory-stat .label {
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    .hot-product {
+      display: flex;
+      align-items: center;
+      padding: var(--space-sm);
+      background: linear-gradient(135deg, #fffbeb, #fef3c7);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+    }
+
+    .hot-product .label {
+      color: var(--warning);
+      margin-right: var(--space-sm);
+    }
+
+    .hot-product .price {
+      margin-left: auto;
+      font-weight: 700;
+      color: var(--danger);
+    }
+
+    /* Hot Products */
+    .hot-products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-md);
+    }
+
+    .hot-product-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      border: 1px solid var(--border);
+      transition: all var(--transition-base);
+    }
+
+    .hot-product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .hot-product-card h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .hot-product-price {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--danger);
+      margin-bottom: var(--space-sm);
+    }
+
+    .hot-product-factory {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .hot-product-stats {
+      display: flex;
+      gap: var(--space-md);
+      font-size: 12px;
+      color: var(--text-tertiary);
+    }
+
+    /* Report Button */
+    .report-btn {
+      position: fixed;
+      right: var(--space-lg);
+      bottom: var(--space-lg);
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-xl);
+      border: 3px solid white;
+      transition: all var(--transition-base);
+    }
+
+    .report-btn:hover {
+      transform: scale(1.1);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-primary);
+      border-radius: var(--radius-xl);
+      max-width: 700px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: var(--space-xl);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      width: 36px;
+      height: 36px;
+      background: var(--bg-secondary);
+      border: none;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all var(--transition-base);
+    }
+
+    .modal-close:hover {
+      background: var(--bg-tertiary);
+    }
+
+    .report-section {
+      margin-bottom: var(--space-lg);
+    }
+
+    .report-section h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: var(--space-md);
+      color: var(--text-primary);
+    }
+
+    .report-highlight {
+      background: var(--bg-secondary);
+      padding: var(--space-md);
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-sm);
+      font-size: 14px;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+      padding: var(--space-md);
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table th {
+      background: var(--bg-secondary);
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .table td {
+      font-size: 14px;
+    }
+
+    /* Loading & Empty States */
+    .loading,
+    .empty {
+      text-align: center;
+      padding: var(--space-2xl);
+      color: var(--text-tertiary);
+    }
+
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: var(--space-md);
+      opacity: 0.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: var(--space-md);
+      }
+
+      .hero {
+        padding: var(--space-lg) var(--space-md);
+      }
+
+      .hero h2 {
+        font-size: 24px;
+      }
+
+      .industry-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-sm);
+      }
+
+      .industry-card {
+        padding: var(--space-sm);
+      }
+
+      .industry-icon {
+        font-size: 28px;
+      }
+
+      .factory-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .overview-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .report-btn {
+        width: 56px;
+        height: 56px;
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <a href="#" class="logo">
+        <div class="logo-icon">TB</div>
+        <div class="logo-text">
+          <h1>TikTok B2B</h1>
+          <p>工厂出口信息平台</p>
+        </div>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h2>助力中国工厂开拓全球市场</h2>
+        <p>实时追踪 TikTok 各地区行业热点，分析出口潜力，辅助您的业务决策</p>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">覆盖地区</div>
+            <div class="stat-value">4</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">行业分类</div>
+            <div class="stat-value">8</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">工厂数据</div>
+            <div class="stat-value">640+</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">每周更新</div>
+            <div class="stat-value">实时</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="section">
+      <div class="search-container">
+        <input type="text" class="search-input" id="searchInput" placeholder="搜索行业：纺织、电子、机械、化工...">
+        <button class="btn" onclick="handleSearch()">搜索</button>
+      </div>
+
+      <div class="section-title" style="margin-bottom: 16px;">选择行业</div>
+      <div class="industry-grid" id="industryGrid">
+        <div class="loading">加载中...</div>
+      </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section class="section" id="overviewSection" style="display: none;">
+      <div class="section-header">
+        <h3 class="section-title"><span id="overviewTitle"></span> 出口概况</h3>
+      </div>
+      <div class="overview-grid" id="overviewGrid"></div>
+    </section>
+
+    <!-- Factory Section -->
+    <section class="section" id="factorySection" style="display: none;">
+      <div class="section-header">
+        <h3 class="section-title">优质工厂推荐 <span id="factoryCount" style="font-size: 14px; color: var(--text-tertiary); font-weight: 400;"></span></h3>
+      </div>
+      <div class="factory-grid" id="factoryGrid"></div>
+    </section>
+
+    <!-- Hot Products Section -->
+    <section class="section" id="hotProductSection" style="display: none;">
+      <div class="section-header">
+        <h3 class="section-title">行业爆款产品</h3>
+      </div>
+      <div class="hot-products-grid" id="hotProductGrid"></div>
+    </section>
+  </main>
+
+  <!-- Report Button -->
+  <div class="report-btn" onclick="showWeeklyReport()">
+    每周<br>报告
+  </div>
+
+  <!-- Report Modal -->
+  <div class="modal" id="reportModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">每周市场报告</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div id="reportContent"></div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3000/api';
+    let currentIndustry = '';
+    let industries = [];
+
+    // Initialize
+    async function init() {
+      try {
+        const res = await fetch(`${API_BASE}/hot/industries`);
+        const data = await res.json();
+
+        if (data.success) {
+          industries = data.data;
+          renderIndustries();
+        }
+      } catch (error) {
+        console.error('加载失败:', error);
+        document.getElementById('industryGrid').innerHTML = '<div class="empty">加载失败，请确保后端服务已启动</div>';
+      }
+    }
+
+    // Render industries
+    function renderIndustries() {
+      const grid = document.getElementById('industryGrid');
+      grid.innerHTML = industries.map(ind => `
+        <div class="industry-card" onclick="selectIndustry('${ind.id}', '${ind.name}')" role="button" tabindex="0" aria-label="选择${ind.name}">
+          <div class="industry-icon">${ind.icon}</div>
+          <div class="industry-name">${ind.name}</div>
+        </div>
+      `).join('');
+    }
+
+    // Search
+    function handleSearch() {
+      const keyword = document.getElementById('searchInput').value.trim();
+      if (!keyword) {
+        alert('请输入搜索关键词');
+        return;
+      }
+
+      const matched = industries.find(ind =>
+        ind.name.includes(keyword) || ind.keywords.some(k => keyword.includes(k))
+      );
+
+      if (matched) {
+        selectIndustry(matched.id, matched.name);
+      } else {
+        alert('未找到相关行业');
+      }
+    }
+
+    // Select industry
+    async function selectIndustry(id, name) {
+      currentIndustry = id;
+
+      // Update active state
+      document.querySelectorAll('.industry-card').forEach(card => {
+        card.classList.remove('active');
+      });
+      event.target.closest('.industry-card')?.classList.add('active');
+
+      // Show sections
+      document.getElementById('overviewSection').style.display = 'block';
+      document.getElementById('factorySection').style.display = 'block';
+      document.getElementById('hotProductSection').style.display = 'block';
+      document.getElementById('overviewTitle').textContent = name;
+
+      // Load data
+      await Promise.all([
+        loadOverview(id, name),
+        loadFactories(id),
+        loadHotProducts(id)
+      ]);
+    }
+
+    // Load overview
+    async function loadOverview(industry, name) {
+      try {
+        const res = await fetch(`${API_BASE}/hot/overview`);
+        const data = await res.json();
+
+        if (data.success) {
+          const overviewData = [];
+          const flagMap = { 'north-america': '🇺🇸', 'europe': '🇪🇺', 'southeast-asia': '🇸🇬', 'africa': '🇿🇦' };
+
+          for (const [regionId, regionData] of Object.entries(data.data)) {
+            const indData = regionData.industries[industry];
+            if (indData) {
+              overviewData.push({
+                region: regionData.region,
+                flag: flagMap[regionId] || '🌍',
+                totalFactories: indData.totalFactories,
+                totalViews: indData.totalViews,
+                totalInquiries: indData.totalInquiries,
+                recommendation: indData.recommendation
+              });
+            }
+          }
+
+          document.getElementById('overviewGrid').innerHTML = overviewData.map(item => `
+            <div class="overview-card">
+              <div class="overview-header">
+                <span class="region-name">${item.region}</span>
+                <span class="region-flag">${item.flag}</span>
+              </div>
+              <div class="overview-stats">
+                <div class="stat-box">
+                  <div class="label">工厂数</div>
+                  <div class="value">${item.totalFactories}</div>
+                </div>
+                <div class="stat-box">
+                  <div class="label">播放量</div>
+                  <div class="value">${formatNumber(item.totalViews)}</div>
+                </div>
+                <div class="stat-box">
+                  <div class="label">询盘数</div>
+                  <div class="value">${formatNumber(item.totalInquiries)}</div>
+                </div>
+              </div>
+              <div class="recommendation ${getRecommendationClass(item.recommendation)}">
+                ${item.recommendation}
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (error) {
+        console.error('加载概况失败:', error);
+      }
+    }
+
+    // Load factories
+    async function loadFactories(industry) {
+      try {
+        const res = await fetch(`${API_BASE}/hot/search?industry=${industry}&limit=12`);
+        const data = await res.json();
+
+        if (data.success) {
+          document.getElementById('factoryCount').textContent = `(${data.total}家)`;
+          document.getElementById('factoryGrid').innerHTML = data.data.map(item => `
+            <div class="factory-card">
+              <img class="factory-image" src="${item.video.coverImage}" alt="${item.factory.name}">
+              <div class="factory-content">
+                <div class="factory-header">
+                  <div class="factory-info">
+                    <h3>${item.factory.name}</h3>
+                    <div class="factory-tags">
+                      <span class="tag">${item.factory.scale}</span>
+                      ${item.stats.views > 100000 ? '<span class="tag hot">爆款</span>' : ''}
+                    </div>
+                  </div>
+                  <div class="export-score">
+                    <div class="score-label">出口潜力</div>
+                    <div class="score-value">${calculateExportScore(item)}</div>
+                  </div>
+                </div>
+                <div class="factory-export">
+                  出口国家：${item.export.targetCountries.length}个 | ${item.export.mainMarkets.slice(0,3).join('、')}
+                </div>
+                <div class="factory-stats">
+                  <div class="factory-stat">
+                    <div class="value">${formatNumber(item.stats.views)}</div>
+                    <div class="label">播放</div>
+                  </div>
+                  <div class="factory-stat">
+                    <div class="value">${formatNumber(item.stats.followers)}</div>
+                    <div class="label">粉丝</div>
+                  </div>
+                  <div class="factory-stat">
+                    <div class="value">${item.stats.inquiryCount}</div>
+                    <div class="label">询盘</div>
+                  </div>
+                </div>
+                ${item.hotProduct ? `
+                  <div class="hot-product">
+                    <span class="label">爆款产品</span>
+                    <span>${item.hotProduct.name}</span>
+                    <span class="price">${item.hotProduct.price}</span>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (error) {
+        console.error('加载工厂失败:', error);
+      }
+    }
+
+    // Load hot products
+    async function loadHotProducts(industry) {
+      try {
+        const res = await fetch(`${API_BASE}/hot/products?industry=${industry}&limit=6`);
+        const data = await res.json();
+
+        if (data.success && data.data.length > 0) {
+          document.getElementById('hotProductGrid').innerHTML = data.data.map(item => `
+            <div class="hot-product-card">
+              <h4>${item.name}</h4>
+              <div class="hot-product-price">${item.price}</div>
+              <div class="hot-product-factory">工厂：${item.factoryName}</div>
+              <div class="hot-product-stats">
+                <span>👁 ${formatNumber(item.stats.views)}</span>
+                <span>💬 ${item.stats.inquiries} 询盘</span>
+              </div>
+            </div>
+          `).join('');
+        } else {
+          document.getElementById('hotProductSection').style.display = 'none';
+        }
+      } catch (error) {
+        console.error('加载爆款产品失败:', error);
+      }
+    }
+
+    // Show weekly report
+    async function showWeeklyReport() {
+      try {
+        const res = await fetch(`${API_BASE}/hot/weekly-report`);
+        const data = await res.json();
+
+        if (data.success) {
+          const report = data.data;
+          document.getElementById('reportContent').innerHTML = `
+            <div class="report-section">
+              <h3>📅 ${report.week}</h3>
+              ${report.highlights.map(h => `<div class="report-highlight">✨ ${h}</div>`).join('')}
+            </div>
+
+            <div class="report-section">
+              <h3>🌍 地区分析</h3>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>地区</th>
+                    <th>工厂数</th>
+                    <th>总播放量</th>
+                    <th>最热门行业</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${Object.values(report.regionAnalysis).map(r => `
+                    <tr>
+                      <td>${r.name}</td>
+                      <td>${r.totalFactories}</td>
+                      <td>${formatNumber(r.totalViews)}</td>
+                      <td>${r.topIndustry}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+
+            <div class="report-section">
+              <h3>🔥 本周爆款产品</h3>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>产品</th>
+                    <th>价格</th>
+                    <th>供应工厂</th>
+                    <th>播放量</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${report.hotProducts.map(p => `
+                    <tr>
+                      <td>${p.name}</td>
+                      <td>${p.price}</td>
+                      <td>${p.factoryName}</td>
+                      <td>${formatNumber(p.stats.views)}</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            </div>
+          `;
+
+          document.getElementById('reportModal').classList.add('active');
+        }
+      } catch (error) {
+        console.error('加载报告失败:', error);
+        alert('加载报告失败');
+      }
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('reportModal').classList.remove('active');
+    }
+
+    // Format number
+    function formatNumber(num) {
+      if (!num) return '0';
+      if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+      if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+      return num.toString();
+    }
+
+    // Calculate export score
+    function calculateExportScore(item) {
+      let score = 0;
+      if (item.stats.views > 50000) score += 20;
+      if (item.stats.inquiryCount > 100) score += 30;
+      if (item.export.targetCountries.length > 3) score += 20;
+      if (item.factory.certifications.length > 0) score += 15;
+      if (item.hotProduct) score += 15;
+      return score;
+    }
+
+    // Get recommendation class
+    function getRecommendationClass(recommendation) {
+      if (recommendation.includes('高度推荐')) return 'high';
+      if (recommendation.includes('推荐')) return 'medium';
+      return 'low';
+    }
+
+    // Event listeners
+    document.getElementById('searchInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') handleSearch();
+    });
+
+    document.getElementById('reportModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Initialize
+    init();
+  </script>
+</body>
+</html>

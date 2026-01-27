@@ -1,0 +1,109 @@
+<!--pages/detail/detail.wxml-->
+<view class="container" wx:if="{{item}}">
+  <!-- 视频封面 -->
+  <view class="cover-section">
+    <image class="cover-image" src="{{item.coverImage}}" mode="aspectFill" />
+    <view class="play-btn">
+      <text>▶</text>
+    </view>
+  </view>
+
+  <!-- 内容信息 -->
+  <view class="content-section card">
+    <view class="tags">
+      <text class="tag primary">{{regionName}}</text>
+      <text class="tag hot">🔥 热门</text>
+    </view>
+
+    <view class="title">{{item.title}}</view>
+    <view class="description">{{item.description}}</view>
+
+    <!-- 数据统计 -->
+    <view class="stats-grid">
+      <view class="stat-card">
+        <text class="stat-value">{{formatNumber(item.stats.views)}}</text>
+        <text class="stat-label">播放量</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-value">{{formatNumber(item.stats.likes)}}</text>
+        <text class="stat-label">点赞数</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-value">{{formatNumber(item.stats.comments)}}</text>
+        <text class="stat-label">评论数</text>
+      </view>
+      <view class="stat-card highlight">
+        <text class="stat-value">+{{item.stats.growth}}%</text>
+        <text class="stat-label">增长率</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 商品信息 -->
+  <view class="product-section card" wx:if="{{item.product}}">
+    <view class="section-title">
+      <text>🛒 相关商品</text>
+    </view>
+    <view class="product-info">
+      <view class="product-main">
+        <text class="product-price">${{item.product.price}}</text>
+        <text class="product-shop">{{item.product.shop}}</text>
+      </view>
+      <view class="product-stats">
+        <text class="sales">已售 {{formatNumber(item.stats.sales)}}</text>
+        <text class="growth">📈 增长 +{{item.stats.growth}}%</text>
+      </view>
+    </view>
+    <button class="btn-view-product">查看商品详情</button>
+  </view>
+
+  <!-- 市场分析 -->
+  <view class="analysis-section card">
+    <view class="section-title">
+      <text>📊 市场信号分析</text>
+    </view>
+    <view class="analysis-content">
+      <view class="analysis-item">
+        <text class="analysis-label">市场需求</text>
+        <view class="analysis-bar">
+          <view class="bar-fill" style="width: 85%"></view>
+        </view>
+        <text class="analysis-value">高需求</text>
+      </view>
+      <view class="analysis-item">
+        <text class="analysis-label">价格竞争力</text>
+        <view class="analysis-bar">
+          <view class="bar-fill" style="width: 70%"></view>
+        </view>
+        <text class="analysis-value">中档价位</text>
+      </view>
+      <view class="analysis-item">
+        <text class="analysis-label">趋势持续</text>
+        <view class="analysis-bar">
+          <view class="bar-fill" style="width: 90%"></view>
+        </view>
+        <text class="analysis-value">持续上升</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-bar">
+    <button class="action-btn" bindtap="shareItem">
+      <text>📤 分享</text>
+    </button>
+    <button class="action-btn primary" bindtap="generatePoster">
+      <text>📄 生成海报</text>
+    </button>
+  </view>
+</view>
+
+<!-- 加载状态 -->
+<view class="loading" wx:if="{{loading}}">
+  <text>加载中...</text>
+</view>
+
+<!-- 空状态 -->
+<view class="empty" wx:if="{{!item && !loading}}">
+  <text>内容不存在</text>
+</view>

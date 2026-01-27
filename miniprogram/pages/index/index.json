@@ -1,0 +1,6 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "TikTok热点资讯",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}

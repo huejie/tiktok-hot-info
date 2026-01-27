@@ -1,0 +1,39 @@
+<!--pages/region/region.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">选择地区</text>
+    <text class="subtitle">查看不同地区的TikTok热点</text>
+  </view>
+
+  <view class="region-list">
+    <view class="region-item card {{item.id === currentRegion ? 'active' : ''}}"
+          wx:for="{{regions}}"
+          wx:key="id"
+          bindtap="selectRegion"
+          data-id="{{item.id}}">
+      <view class="region-header">
+        <text class="flag">{{item.flag}}</text>
+        <view class="region-info">
+          <text class="name">{{item.name}}</text>
+          <text class="name-en">{{item.nameEn}}</text>
+        </view>
+        <text class="check" wx:if="{{item.id === currentRegion}}">✓</text>
+      </view>
+
+      <view class="region-stats" wx:if="{{item.stats}}">
+        <view class="stat-item">
+          <text class="stat-value">{{formatNumber(item.stats.totalViews)}}</text>
+          <text class="stat-label">总播放量</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-value">{{item.stats.totalItems}}</text>
+          <text class="stat-label">热点数量</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="tips">
+    <text>💡 切换地区后可查看对应地区的热门内容</text>
+  </view>
+</view>

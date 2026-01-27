@@ -1,0 +1,182 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- 顶部搜索栏 -->
+  <view class="search-section">
+    <view class="search-bar">
+      <input class="search-input"
+             placeholder="搜索行业：纺织、电子、机械..."
+             bindconfirm="onSearch"
+             value="{{searchKeyword}}" />
+      <text class="search-btn" bindtap="onSearch">🔍</text>
+    </view>
+  </view>
+
+  <!-- 行业快捷选择 -->
+  <view class="industry-section">
+    <view class="section-title">
+      <text>🏭 选择行业</text>
+    </view>
+    <scroll-view scroll-x class="industry-scroll">
+      <view class="industry-item {{currentIndustry === item.id ? 'active' : ''}}"
+            wx:for="{{industries}}"
+            wx:key="id"
+            bindtap="selectIndustry"
+            data-id="{{item.id}}">
+        <text class="icon">{{item.icon}}</text>
+        <text class="name">{{item.name}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 地区筛选 -->
+  <view class="region-filter" wx:if="{{currentIndustry}}">
+    <view class="region-item {{!currentRegion ? 'active' : ''}}"
+          bindtap="selectRegion"
+          data-region="">
+      全部地区
+    </view>
+    <view class="region-item {{currentRegion === item.id ? 'active' : ''}}"
+          wx:for="{{regions}}"
+          wx:key="id"
+          bindtap="selectRegion"
+          data-region="{{item.id}}">
+      {{item.flag}} {{item.name}}
+    </view>
+  </view>
+
+  <!-- 数据概览（新客户签单用） -->
+  <view class="overview-section card" wx:if="{{overview && currentIndustry}}">
+    <view class="section-title">
+      <text>📊 {{currentIndustryName}}出口概况</text>
+    </view>
+    <view class="overview-grid">
+      <view class="overview-item"
+            wx:for="{{overviewData}}"
+            wx:key="region">
+        <text class="region-name">{{item.region}}</text>
+        <view class="region-stats">
+          <view class="stat-row">
+            <text class="label">工厂数</text>
+            <text class="value">{{item.totalFactories}}</text>
+          </view>
+          <view class="stat-row">
+            <text class="label">播放量</text>
+            <text class="value">{{formatNumber(item.totalViews)}}</text>
+          </view>
+          <view class="stat-row">
+            <text class="label">询盘数</text>
+            <text class="value">{{formatNumber(item.totalInquiries)}}</text>
+          </view>
+        </view>
+        <view class="recommendation {{item.recommendationClass}}">
+          <text>{{item.recommendation}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 爆款产品推荐 -->
+  <view class="hot-products-section" wx:if="{{hotProducts.length > 0}}">
+    <view class="section-title">
+      <text>🔥 行业爆款产品</text>
+    </view>
+    <scroll-view scroll-x class="products-scroll">
+      <view class="product-item card"
+            wx:for="{{hotProducts}}"
+            wx:key="name">
+        <image class="product-image" src="{{item.image || '/images/product-placeholder.png'}}" mode="aspectFill" />
+        <view class="product-info">
+          <text class="product-name">{{item.name}}</text>
+          <text class="product-price">{{item.price}}</text>
+          <text class="product-factory">{{item.factoryName}}</text>
+          <view class="product-stats">
+            <text>👁 {{formatNumber(item.stats.views)}}</text>
+            <text>💬 {{item.stats.inquiries}}询盘</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 工厂列表 -->
+  <view class="factory-list" wx:if="{{factories.length > 0}}">
+    <view class="section-title">
+      <text>🏭 优质工厂推荐</text>
+      <text class="count">({{factories.length}}家)</text>
+    </view>
+
+    <view class="factory-item card"
+          wx:for="{{factories}}"
+          wx:key="id"
+          bindtap="goDetail"
+          data-id="{{item.id}}">
+      <!-- 工厂基本信息 -->
+      <view class="factory-header">
+        <view class="factory-main">
+          <text class="factory-name">{{item.factory.name}}</text>
+          <view class="factory-tags">
+            <text class="tag">{{item.factory.scale}}</text>
+            <text class="tag primary" wx:if="{{item.isHot}}">🔥爆款</text>
+          </view>
+        </view>
+        <view class="factory-score">
+          <text class="score-label">出口潜力</text>
+          <text class="score-value">{{item.exportScore}}</text>
+        </view>
+      </view>
+
+      <!-- 视频内容 -->
+      <view class="factory-video" wx:if="{{item.video.coverImage}}">
+        <image class="video-cover" src="{{item.video.coverImage}}" mode="aspectFill" />
+        <view class="video-title">{{item.video.title}}</view>
+      </view>
+
+      <!-- 出口信息 -->
+      <view class="factory-export">
+        <text class="export-label">📤 出口国家：</text>
+        <text class="export-countries">{{item.export.targetCountries.length}}个</text>
+        <text class="export-list">{{item.export.mainMarkets.slice(0,3).join('、')}}</text>
+      </view>
+
+      <!-- 数据统计 -->
+      <view class="factory-stats">
+        <view class="stat-item">
+          <text class="stat-value">{{formatNumber(item.stats.views)}}</text>
+          <text class="stat-label">播放</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-value">{{formatNumber(item.stats.followers)}}</text>
+          <text class="stat-label">粉丝</text>
+        </view>
+        <view class="stat-item highlight">
+          <text class="stat-value">{{item.stats.inquiryCount}}</text>
+          <text class="stat-label">询盘</text>
+        </view>
+      </view>
+
+      <!-- 爆款产品 -->
+      <view class="factory-hot-product" wx:if="{{item.hotProduct}}">
+        <text class="hot-label">💎 爆款：</text>
+        <text class="hot-name">{{item.hotProduct.name}}</text>
+        <text class="hot-price">{{item.hotProduct.price}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{!loading && factories.length === 0 && !currentIndustry}}">
+    <text class="empty-icon">🏭</text>
+    <text class="empty-text">请先选择行业</text>
+    <text class="empty-hint">搜索您的行业，查看出口市场情况</text>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <!-- 每周报告按钮 -->
+  <view class="weekly-report-btn" bindtap="viewWeeklyReport" wx:if="{{currentIndustry}}">
+    <text>📊 每周报告</text>
+  </view>
+</view>
