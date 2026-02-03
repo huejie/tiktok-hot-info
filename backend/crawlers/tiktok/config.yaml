@@ -1,0 +1,110 @@
+# Douyin_TikTok_Download_API 配置文件
+# 文档: https://github.com/Evil0ctal/Douyin_TikTok_Download_API
+
+# TikTok Cookie 设置
+# 获取方式:
+# 1. 打开浏览器，访问 tiktok.com 并登录
+# 2. 打开开发者工具 (F12) -> Application -> Cookies
+# 3. 复制所有 Cookie 值
+cookie: ""
+
+# API 设置
+api:
+  # API 端口
+  port: 8000
+  # API 密钥 (可选，留空则不需要认证)
+  key: ""
+  # CORS 允许的源
+  cors_origins:
+    - "*"
+  # 请求速率限制 (每分钟请求数)
+  rate_limit: 60
+
+# 代理设置 (可选)
+proxy:
+  # HTTP 代理
+  http_proxy: ""
+  # HTTPS 代理
+  https_proxy: ""
+  # SOCKS5 代理
+  socks_proxy: ""
+  # 代理认证
+  proxy_username: ""
+  proxy_password: ""
+
+# 请求设置
+request:
+  # 请求延迟 (毫秒)
+  delay: 1000
+  # 请求超时 (秒)
+  timeout: 15
+  # 最大并发请求数
+  max_concurrent: 5
+  # 重试次数
+  retry_times: 3
+  # 重试延迟 (毫秒)
+  retry_delay: 2000
+
+# User-Agent 设置
+user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
+# 日志设置
+log:
+  # 日志级别: debug, info, warn, error
+  level: "info"
+  # 日志文件路径
+  file: "./logs/tiktok-api.log"
+  # 是否输出到控制台
+  console: true
+  # 日志保留天数
+  max_days: 7
+
+# 数据缓存设置 (可选)
+cache:
+  # 是否启用缓存
+  enabled: true
+  # 缓存时间 (秒)
+  ttl: 3600
+  # 缓存类型: memory, redis
+  type: "memory"
+  # Redis 配置 (当 type=redis 时使用)
+  redis:
+    host: "localhost"
+    port: 6379
+    password: ""
+    db: 0
+
+# TikTok Creative Center 设置
+creative_center:
+  # 默认地区
+  default_region: "us"
+  # 默认设备类型: android, ios
+  default_device: "android"
+  # 默认时间周期 (天)
+  default_period: 7
+  # 支持的地区列表
+  regions:
+    - us     # 美国
+    - gb     # 英国
+    - ca     # 加拿大
+    - au     # 澳大利亚
+    - de     # 德国
+    - fr     # 法国
+    - it     # 意大利
+    - es     # 西班牙
+    - jp     # 日本
+    - kr     # 韩国
+    - sg     # 新加坡
+    - my     # 马来西亚
+    - th     # 泰国
+    - vn     # 越南
+    - ph     # 菲律宾
+    - id     # 印度尼西亚
+    - in     # 印度
+    - br     # 巴西
+    - mx     # 墨西哥
+    - sa     # 沙特阿拉伯
+    - ae     # 阿联酋
+    - za     # 南非
+    - ng     # 尼日利亚
+    - eg     # 埃及

@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # Douyin_TikTok_Download_API 服务
+  tiktok-api:
+    image: ghcr.io/evil0ctal/tiktok-douyin-download-api:latest
+    container_name: tiktok-crawler-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      # TikTok Cookie (从浏览器获取)
+      - COOKIE=${TIKTOK_COOKIE}
+      # 代理设置 (可选)
+      - HTTP_PROXY=${HTTP_PROXY:-}
+      - HTTPS_PROXY=${HTTPS_PROXY:-}
+      # API 密钥 (可选，用于保护 API)
+      - API_KEY=${TIKTOK_API_KEY:-}
+      # 请求延迟 (毫秒)
+      - REQUEST_DELAY=1000
+      # 并发请求数
+      - MAX_CONCURRENT_REQUESTS=5
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - ./logs:/app/logs
+    networks:
+      - tiktok-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  tiktok-network:
+    driver: bridge
+
+volumes:
+  logs:

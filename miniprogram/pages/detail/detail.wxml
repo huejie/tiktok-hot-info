@@ -1,18 +1,16 @@
-<!--pages/detail/detail.wxml-->
+<!--pages/detail/detail.wxml - 优化版本 -->
 <view class="container" wx:if="{{item}}">
   <!-- 视频封面 -->
   <view class="cover-section">
     <image class="cover-image" src="{{item.coverImage}}" mode="aspectFill" />
-    <view class="play-btn">
-      <text>▶</text>
-    </view>
+    <view class="play-btn"></view>
   </view>
 
   <!-- 内容信息 -->
   <view class="content-section card">
     <view class="tags">
       <text class="tag primary">{{regionName}}</text>
-      <text class="tag hot">🔥 热门</text>
+      <text class="tag hot">热门</text>
     </view>
 
     <view class="title">{{item.title}}</view>
@@ -42,7 +40,8 @@
   <!-- 商品信息 -->
   <view class="product-section card" wx:if="{{item.product}}">
     <view class="section-title">
-      <text>🛒 相关商品</text>
+      <view class="icon-cart" style="width: 32rpx; height: 32rpx;"></view>
+      <text>相关商品</text>
     </view>
     <view class="product-info">
       <view class="product-main">
@@ -51,7 +50,10 @@
       </view>
       <view class="product-stats">
         <text class="sales">已售 {{formatNumber(item.stats.sales)}}</text>
-        <text class="growth">📈 增长 +{{item.stats.growth}}%</text>
+        <view class="growth">
+          <view class="icon-trend" style="width: 24rpx; height: 24rpx;"></view>
+          <text>增长 +{{item.stats.growth}}%</text>
+        </view>
       </view>
     </view>
     <button class="btn-view-product">查看商品详情</button>
@@ -60,7 +62,8 @@
   <!-- 市场分析 -->
   <view class="analysis-section card">
     <view class="section-title">
-      <text>📊 市场信号分析</text>
+      <view class="icon-chart" style="width: 32rpx; height: 32rpx;"></view>
+      <text>市场信号分析</text>
     </view>
     <view class="analysis-content">
       <view class="analysis-item">
@@ -87,23 +90,29 @@
     </view>
   </view>
 
-  <!-- 操作按钮 -->
-  <view class="action-bar">
-    <button class="action-btn" bindtap="shareItem">
-      <text>📤 分享</text>
+  <!-- 浮动操作按钮 -->
+  <view class="floating-action-bar">
+    <button class="fab-button" bindtap="shareItem">
+      <view class="fab-icon">
+        <text style="font-size: 36rpx;">⤴</text>
+      </view>
     </button>
-    <button class="action-btn primary" bindtap="generatePoster">
-      <text>📄 生成海报</text>
+    <button class="fab-button primary" bindtap="generatePoster">
+      <view class="fab-icon">
+        <text style="font-size: 40rpx;">📄</text>
+      </view>
+      <view class="fab-badge">海报</view>
     </button>
   </view>
 </view>
 
 <!-- 加载状态 -->
 <view class="loading" wx:if="{{loading}}">
-  <text>加载中...</text>
+  <view class="loading-spinner"></view>
+  <text class="loading-text">加载中...</text>
 </view>
 
 <!-- 空状态 -->
 <view class="empty" wx:if="{{!item && !loading}}">
-  <text>内容不存在</text>
+  <text class="empty-text">内容不存在</text>
 </view>

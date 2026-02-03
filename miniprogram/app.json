@@ -2,7 +2,8 @@
   "pages": [
     "pages/index/index",
     "pages/region/region",
-    "pages/detail/detail"
+    "pages/detail/detail",
+    "pages/poster/poster"
   ],
   "window": {
     "backgroundTextStyle": "light",

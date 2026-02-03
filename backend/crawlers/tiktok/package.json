@@ -1,0 +1,17 @@
+{
+  "name": "tiktok-crawler-scripts",
+  "version": "1.0.0",
+  "description": "TikTok 热点数据采集脚本",
+  "scripts": {
+    "collect": "node scripts/collect.js",
+    "collect:batch": "node scripts/collect.js --batch=us,gb,ca,au,de,fr,jp",
+    "collect:hashtags": "node scripts/collect.js --type=hashtags",
+    "collect:songs": "node scripts/collect.js --type=songs",
+    "collect:videos": "node scripts/collect.js --type=videos",
+    "collect:factory": "node scripts/collect-factory-info.js",
+    "collect:all": "node scripts/collect.js --type=all --batch=us,gb,ca,au,de,fr,jp,kr,sg,my,th,vn,ph,id"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}

@@ -1,6 +1,8 @@
 // B2B工厂信息数据服务
 const { FactoryInfo, MockDataGenerator } = require('../models/FactoryInfo');
 const config = require('../config');
+const tiktokCrawler = require('./crawler/tikTokCrawler');
+const tiktokDataService = require('./tiktokDataService');
 
 class DataService {
   /**
@@ -8,26 +10,125 @@ class DataService {
    * @param {string} industry - 行业ID
    * @param {string} region - 地区ID
    * @param {number} limit - 返回数量
+   * @param {string} source - 数据源 ('mock' | 'tiktok' | 'hybrid')
    */
-  async searchFactories(industry, region = null, limit = 20) {
-    // Demo 阶段：使用 Mock 数据
-    if (config.dataSource === 'mock') {
-      const regions = region ? [region] : Object.keys(config.regions);
-      const items = [];
-
-      for (const r of regions) {
-        const regionItems = MockDataGenerator.generateFactoryInfo(r, industry, Math.ceil(limit / regions.length));
-        items.push(...regionItems);
+  async searchFactories(industry, region = null, limit = 20, source = config.dataSource || 'mock') {
+    // 使用真实 TikTok 数据
+    if (source === 'tiktok' || source === 'hybrid') {
+      try {
+        const tiktokData = await this.getTikTokTrendingData(region, limit);
+        if (tiktokData.length > 0) {
+          // 按热度排序
+          tiktokData.sort((a, b) => (b.stats?.views || 0) - (a.stats?.views || 0));
+          return tiktokData.slice(0, limit);
+        }
+      } catch (error) {
+        console.warn('获取 TikTok 数据失败，回退到 Mock 数据:', error.message);
       }
-
-      // 按出口潜力排序
-      items.sort((a, b) => b.getExportPotential() - a.getExportPotential());
-
-      return items;
     }
 
-    // 正式运营：调用 API
-    return [];
+    // Demo 阶段：使用 Mock 数据（默认或回退）
+    const regions = region ? [region] : Object.keys(config.regions);
+    const items = [];
+
+    for (const r of regions) {
+      const regionItems = MockDataGenerator.generateFactoryInfo(r, industry, Math.ceil(limit / regions.length));
+      items.push(...regionItems);
+    }
+
+    // 按出口潜力排序
+    items.sort((a, b) => b.getExportPotential() - a.getExportPotential());
+
+    return items;
+  }
+
+  /**
+   * 获取 TikTok Creative Center 热门数据
+   * @param {string} region - 地区代码 (us, gb, ca, etc.)
+   * @param {number} limit - 返回数量
+   */
+  async getTikTokTrendingData(region = 'us', limit = 20) {
+    try {
+      // 检查 API 服务是否可用
+      await tiktokCrawler.healthCheck();
+
+      const regionCode = this.mapRegionToTikTok(region);
+      const data = [];
+
+      // 获取热门标签
+      try {
+        const hashtags = await tiktokCrawler.getTrendingHashtags({
+          region: regionCode,
+          period: 7
+        });
+        data.push(...hashtags.slice(0, Math.ceil(limit / 3)));
+      } catch (error) {
+        console.warn('获取热门标签失败:', error.message);
+      }
+
+      // 获取热门视频
+      try {
+        const videos = await tiktokCrawler.getTrendingVideos({
+          region: regionCode,
+          period: 7
+        });
+        data.push(...videos.slice(0, Math.ceil(limit / 3)));
+      } catch (error) {
+        console.warn('获取热门视频失败:', error.message);
+      }
+
+      // 获取热门音乐
+      try {
+        const songs = await tiktokCrawler.getTrendingSongs({
+          region: regionCode,
+          period: 7
+        });
+        data.push(...songs.slice(0, Math.ceil(limit / 3)));
+      } catch (error) {
+        console.warn('获取热门音乐失败:', error.message);
+      }
+
+      return data;
+    } catch (error) {
+      console.error('获取 TikTok 数据失败:', error.message);
+      return [];
+    }
+  }
+
+  /**
+   * 将内部地区代码映射到 TikTok 地区代码
+   * @param {string} region - 内部地区代码
+   */
+  mapRegionToTikTok(region) {
+    const regionMap = {
+      'north-america': 'us',
+      'europe': 'gb',
+      'asia': 'jp',
+      'southeast-asia': 'sg',
+      'south-america': 'br'
+    };
+    return regionMap[region] || region || 'us';
+  }
+
+  /**
+   * 搜索 TikTok 内容（工厂/产品相关）
+   * @param {string} keyword - 搜索关键词
+   * @param {string} type - 内容类型 (video, hashtag, sound, user)
+   * @param {number} count - 返回数量
+   */
+  async searchTikTokContent(keyword, type = 'video', count = 20) {
+    try {
+      await tiktokCrawler.healthCheck();
+      const results = await tiktokCrawler.search(keyword, {
+        type,
+        count,
+        region: 'us'
+      });
+      return results;
+    } catch (error) {
+      console.error('搜索 TikTok 内容失败:', error.message);
+      return [];
+    }
   }
 
   /**

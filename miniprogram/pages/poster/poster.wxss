@@ -1,0 +1,216 @@
+/* pages/poster/poster.wxss - 海报预览样式 */
+@import "/styles/icons.wxss";
+
+.container {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  padding-bottom: 240rpx;
+}
+
+/* 海报区域 */
+.poster-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40rpx;
+  background: #fff;
+}
+
+.poster-canvas {
+  width: 750rpx;
+  height: 1334rpx;
+  background: #f5f5f5;
+  box-shadow: 0 8rpx 32rpx rgba(15, 23, 42, 0.15);
+  border-radius: 16rpx;
+}
+
+/* 操作栏 */
+.action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  padding: 20rpx 24rpx;
+  display: flex;
+  gap: 12rpx;
+  box-shadow: 0 -4rpx 16rpx rgba(15, 23, 42, 0.08);
+  border-top: 1rpx solid var(--border);
+  z-index: 10;
+}
+
+.action-btn {
+  flex: 1;
+  height: 96rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.action-btn.primary {
+  background: var(--cta);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4rpx 12rpx rgba(3, 105, 161, 0.25);
+}
+
+.action-btn.primary:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+.action-btn.secondary {
+  background: #F8FAFC;
+  color: var(--text-primary);
+  border: 2rpx solid var(--border);
+}
+
+.action-btn.secondary:active {
+  background: #F1F5F9;
+  transform: scale(0.98);
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 模板选择 */
+.template-section {
+  background: #fff;
+  padding: 32rpx 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.title-icon {
+  font-size: 36rpx;
+}
+
+.template-scroll {
+  white-space: nowrap;
+}
+
+.template-item {
+  display: inline-block;
+  margin-right: 16rpx;
+}
+
+.template-preview {
+  min-width: 180rpx;
+  height: 88rpx;
+  background: #F8FAFC;
+  border: 2rpx solid var(--border);
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  padding: 0 24rpx;
+  transition: all 0.2s ease;
+}
+
+.template-item.active .template-preview {
+  background: var(--cta);
+  border-color: var(--cta);
+}
+
+.template-item.active .template-icon,
+.template-item.active .template-name {
+  color: #fff;
+}
+
+.template-icon {
+  font-size: 32rpx;
+}
+
+.template-name {
+  font-size: 24rpx;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* 提示区域 */
+.tips-section {
+  background: #fff;
+  padding: 32rpx 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.tips-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16rpx;
+}
+
+.tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.tip-item {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* 加载遮罩 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 24rpx;
+  color: #fff;
+  font-size: 28rpx;
+}
+
+/* 图标样式 */
+.icon-sync,
+.icon-share,
+.icon-download {
+  font-size: 32rpx;
+  font-weight: bold;
+}

@@ -1,4 +1,4 @@
-<!--pages/index/index.wxml-->
+<!--pages/index/index.wxml - 优化版本 -->
 <view class="container">
   <!-- 顶部搜索栏 -->
   <view class="search-section">
@@ -7,14 +7,15 @@
              placeholder="搜索行业：纺织、电子、机械..."
              bindconfirm="onSearch"
              value="{{searchKeyword}}" />
-      <text class="search-btn" bindtap="onSearch">🔍</text>
+      <view class="search-btn icon-search" bindtap="onSearch"></view>
     </view>
   </view>
 
   <!-- 行业快捷选择 -->
   <view class="industry-section">
     <view class="section-title">
-      <text>🏭 选择行业</text>
+      <view class="section-icon icon-factory"></view>
+      <text>选择行业</text>
     </view>
     <scroll-view scroll-x class="industry-scroll">
       <view class="industry-item {{currentIndustry === item.id ? 'active' : ''}}"
@@ -22,7 +23,7 @@
             wx:key="id"
             bindtap="selectIndustry"
             data-id="{{item.id}}">
-        <text class="icon">{{item.icon}}</text>
+        <view class="icon icon-{{item.iconClass}}">{{item.icon}}</view>
         <text class="name">{{item.name}}</text>
       </view>
     </scroll-view>
@@ -44,10 +45,60 @@
     </view>
   </view>
 
+  <!-- 骨架屏加载状态 -->
+  <view class="skeleton-container" wx:if="{{loading && factories.length === 0}}">
+    <view class="skeleton-factory-item">
+      <view class="skeleton-factory-header">
+        <view class="skeleton-factory-main">
+          <view class="skeleton factory-name"></view>
+          <view class="skeleton-factory-tags">
+            <view class="skeleton-tag"></view>
+            <view class="skeleton-tag"></view>
+          </view>
+        </view>
+        <view class="skeleton-factory-score">
+          <view class="skeleton" style="height: 36rpx; width: 80rpx; margin-bottom: 8rpx;"></view>
+          <view class="skeleton" style="height: 24rpx; width: 60rpx;"></view>
+        </view>
+      </view>
+      <view class="skeleton-video-cover"></view>
+      <view class="skeleton-stats-row">
+        <view class="skeleton-stat">
+          <view class="skeleton-stat-value"></view>
+          <view class="skeleton-stat-label"></view>
+        </view>
+        <view class="skeleton-stat">
+          <view class="skeleton-stat-value"></view>
+          <view class="skeleton-stat-label"></view>
+        </view>
+        <view class="skeleton-stat">
+          <view class="skeleton-stat-value"></view>
+          <view class="skeleton-stat-label"></view>
+        </view>
+      </view>
+    </view>
+    <view class="skeleton-factory-item">
+      <view class="skeleton-factory-header">
+        <view class="skeleton-factory-main">
+          <view class="skeleton factory-name"></view>
+          <view class="skeleton-factory-tags">
+            <view class="skeleton-tag"></view>
+          </view>
+        </view>
+        <view class="skeleton-factory-score">
+          <view class="skeleton" style="height: 36rpx; width: 80rpx; margin-bottom: 8rpx;"></view>
+          <view class="skeleton" style="height: 24rpx; width: 60rpx;"></view>
+        </view>
+      </view>
+      <view class="skeleton-video-cover"></view>
+    </view>
+  </view>
+
   <!-- 数据概览（新客户签单用） -->
-  <view class="overview-section card" wx:if="{{overview && currentIndustry}}">
+  <view class="overview-section card" wx:if="{{overview && currentIndustry && !loading}}">
     <view class="section-title">
-      <text>📊 {{currentIndustryName}}出口概况</text>
+      <view class="section-icon icon-chart"></view>
+      <text>{{currentIndustryName}}出口概况</text>
     </view>
     <view class="overview-grid">
       <view class="overview-item"
@@ -76,9 +127,10 @@
   </view>
 
   <!-- 爆款产品推荐 -->
-  <view class="hot-products-section" wx:if="{{hotProducts.length > 0}}">
+  <view class="hot-products-section" wx:if="{{hotProducts.length > 0 && !loading}}">
     <view class="section-title">
-      <text>🔥 行业爆款产品</text>
+      <view class="section-icon icon-fire"></view>
+      <text>行业爆款产品</text>
     </view>
     <scroll-view scroll-x class="products-scroll">
       <view class="product-item card"
@@ -90,8 +142,11 @@
           <text class="product-price">{{item.price}}</text>
           <text class="product-factory">{{item.factoryName}}</text>
           <view class="product-stats">
-            <text>👁 {{formatNumber(item.stats.views)}}</text>
-            <text>💬 {{item.stats.inquiries}}询盘</text>
+            <view class="product-stat">
+              <view class="icon-eye" style="width: 28rpx; height: 28rpx; display: inline-block; vertical-align: middle;"></view>
+              <text>{{formatNumber(item.stats.views)}}</text>
+            </view>
+            <text>{{item.stats.inquiries}}询盘</text>
           </view>
         </view>
       </view>
@@ -99,9 +154,10 @@
   </view>
 
   <!-- 工厂列表 -->
-  <view class="factory-list" wx:if="{{factories.length > 0}}">
+  <view class="factory-list" wx:if="{{factories.length > 0 && !loading}}">
     <view class="section-title">
-      <text>🏭 优质工厂推荐</text>
+      <view class="section-icon icon-factory"></view>
+      <text>优质工厂推荐</text>
       <text class="count">({{factories.length}}家)</text>
     </view>
 
@@ -116,7 +172,7 @@
           <text class="factory-name">{{item.factory.name}}</text>
           <view class="factory-tags">
             <text class="tag">{{item.factory.scale}}</text>
-            <text class="tag primary" wx:if="{{item.isHot}}">🔥爆款</text>
+            <text class="tag primary" wx:if="{{item.isHot}}">爆款</text>
           </view>
         </view>
         <view class="factory-score">
@@ -133,7 +189,8 @@
 
       <!-- 出口信息 -->
       <view class="factory-export">
-        <text class="export-label">📤 出口国家：</text>
+        <view class="icon-export" style="width: 28rpx; height: 28rpx; display: inline-block; vertical-align: middle; margin-right: 8rpx;"></view>
+        <text class="export-label">出口国家：</text>
         <text class="export-countries">{{item.export.targetCountries.length}}个</text>
         <text class="export-list">{{item.export.mainMarkets.slice(0,3).join('、')}}</text>
       </view>
@@ -156,7 +213,8 @@
 
       <!-- 爆款产品 -->
       <view class="factory-hot-product" wx:if="{{item.hotProduct}}">
-        <text class="hot-label">💎 爆款：</text>
+        <view class="icon-gem" style="width: 28rpx; height: 28rpx; display: inline-block; vertical-align: middle;"></view>
+        <text class="hot-label">爆款：</text>
         <text class="hot-name">{{item.hotProduct.name}}</text>
         <text class="hot-price">{{item.hotProduct.price}}</text>
       </view>
@@ -165,18 +223,22 @@
 
   <!-- 空状态 -->
   <view class="empty" wx:if="{{!loading && factories.length === 0 && !currentIndustry}}">
-    <text class="empty-icon">🏭</text>
+    <view class="empty-icon-wrapper">
+      <view class="icon-factory" style="width: 80rpx; height: 80rpx;"></view>
+    </view>
     <text class="empty-text">请先选择行业</text>
     <text class="empty-hint">搜索您的行业，查看出口市场情况</text>
   </view>
 
   <!-- 加载状态 -->
-  <view class="loading" wx:if="{{loading}}">
-    <text>加载中...</text>
+  <view class="loading" wx:if="{{loading && factories.length > 0}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
   </view>
 
   <!-- 每周报告按钮 -->
   <view class="weekly-report-btn" bindtap="viewWeeklyReport" wx:if="{{currentIndustry}}">
-    <text>📊 每周报告</text>
+    <view class="icon-chart" style="width: 40rpx; height: 40rpx;"></view>
+    <text style="font-size: 20rpx; margin-top: 4rpx;">每周报告</text>
   </view>
 </view>

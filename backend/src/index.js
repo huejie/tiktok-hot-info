@@ -30,10 +30,11 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// 启动服务
-app.listen(PORT, () => {
+// 启动服务 - 监听所有网络接口（支持局域网访问）
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 服务启动成功: http://localhost:${PORT}`);
   console.log(`📊 API 文档: http://localhost:${PORT}/health`);
+  console.log(`🌐 局域网访问: http://0.0.0.0:${PORT}`);
 });
 
 module.exports = app;

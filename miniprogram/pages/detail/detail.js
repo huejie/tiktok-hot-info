@@ -64,32 +64,12 @@ Page({
 
   // 生成海报
   generatePoster() {
-    const { item } = this.data;
+    const { item, regionName } = this.data;
     if (!item) return;
 
-    wx.showLoading({ title: '生成中...' });
-
-    this.request('/poster/generate', {
-      method: 'POST',
-      data: {
-        hotItems: [item],
-        region: this.data.regionName
-      }
-    }).then(res => {
-      wx.hideLoading();
-      if (res.success) {
-        wx.showToast({
-          title: '海报生成成功',
-          icon: 'success'
-        });
-        // TODO: 跳转到海报预览或保存到相册
-      }
-    }).catch(() => {
-      wx.hideLoading();
-      wx.showToast({
-        title: '生成失败',
-        icon: 'none'
-      });
+    // 跳转到海报预览页面
+    wx.navigateTo({
+      url: `/pages/poster/poster?id=${item.id}&region=${regionName}`
     });
   },
 

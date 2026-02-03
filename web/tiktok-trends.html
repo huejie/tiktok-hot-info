@@ -4,35 +4,94 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TikTok 热门趋势 - 真实爬虫数据</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      /* Design System Colors */
+      --primary: #0F172A;
+      --secondary: #334155;
+      --cta: #0369A1;
+      --cta-hover: #0284c7;
+      --success: #52c41a;
+      --warning: #fa8c16;
+      --danger: #ef4444;
+
+      /* Neutral Colors */
+      --bg-primary: #ffffff;
+      --bg-secondary: #F8FAFC;
+      --bg-tertiary: #f1f5f9;
+      --text-primary: #020617;
+      --text-secondary: #475569;
+      --text-tertiary: #94a3b8;
+      --border: #e2e8f0;
+
+      /* Spacing */
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+
+      /* Border Radius */
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1);
+
+      /* Transitions */
+      --transition-base: 200ms ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, var(--cta) 0%, var(--primary) 100%);
       min-height: 100vh;
       padding: 20px;
+      color: var(--text-primary);
+      line-height: 1.6;
     }
+
     .container {
       max-width: 1200px;
       margin: 0 auto;
     }
+
     h1 {
       color: white;
       text-align: center;
       margin-bottom: 10px;
       font-size: 2.5rem;
+      font-weight: 700;
     }
+
     .subtitle {
       text-align: center;
       color: rgba(255,255,255,0.9);
       margin-bottom: 30px;
+      font-size: 1.1rem;
     }
+
     .tabs {
       display: flex;
       gap: 10px;
       margin-bottom: 30px;
       justify-content: center;
+      flex-wrap: wrap;
     }
+
     .tab {
       padding: 12px 24px;
       background: rgba(255,255,255,0.1);
@@ -40,188 +99,365 @@
       border-radius: 25px;
       color: white;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all var(--transition-base);
       font-weight: 500;
+      font-size: 15px;
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
-    .tab:hover, .tab.active {
+
+    .tab:hover,
+    .tab.active {
       background: white;
-      color: #667eea;
+      color: var(--cta);
       border-color: white;
+      transform: translateY(-2px);
     }
+
+    .tab:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 2px;
+    }
+
     .status {
       background: rgba(255,255,255,0.95);
-      border-radius: 12px;
+      border-radius: var(--radius-lg);
       padding: 15px 25px;
       margin-bottom: 20px;
       display: flex;
       align-items: center;
       gap: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-md);
+      flex-wrap: wrap;
     }
+
     .status-item {
       display: flex;
       align-items: center;
       gap: 8px;
     }
+
     .status-label {
       font-weight: 600;
-      color: #475569;
+      color: var(--text-secondary);
     }
+
     .status-value {
       padding: 4px 12px;
       border-radius: 20px;
       font-weight: 600;
+      font-size: 14px;
     }
+
     .status-value.yes {
       background: #dcfce7;
-      color: #166534;
+      color: #16a34a;
     }
+
     .status-value.no {
-      background: #fef9c3;
-      color: #92400e;
+      background: #fef3c7;
+      color: #d97706;
     }
-    .loading {
-      text-align: center;
-      color: white;
-      font-size: 1.2rem;
-      padding: 40px;
+
+    .refresh-btn {
+      display: block;
+      margin: 0 auto 30px;
+      padding: 12px 30px;
+      background: white;
+      color: var(--cta);
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-base);
+      box-shadow: var(--shadow-md);
+      min-height: 48px;
     }
-    .error {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 12px;
-      padding: 20px;
-      color: #991b1b;
+
+    .refresh-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
     }
+
+    .refresh-btn:active {
+      transform: translateY(0);
+    }
+
+    .refresh-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .refresh-btn:focus-visible {
+      outline: 2px solid white;
+      outline-offset: 2px;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 20px;
     }
+
     .card {
-      background: white;
-      border-radius: 16px;
+      background: var(--bg-primary);
+      border-radius: var(--radius-xl);
       padding: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition-base);
+      border: 1px solid var(--border);
     }
+
     .card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      box-shadow: var(--shadow-lg);
     }
+
+    .card:focus-visible {
+      outline: 2px solid var(--cta);
+      outline-offset: 2px;
+    }
+
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: start;
       margin-bottom: 15px;
     }
+
     .card-title {
       font-size: 1.3rem;
       font-weight: 700;
-      color: #1e293b;
+      color: var(--text-primary);
       margin-bottom: 5px;
     }
+
     .card-rank {
       background: #fef3c7;
-      color: #92400e;
+      color: #d97706;
       padding: 4px 10px;
       border-radius: 20px;
       font-weight: 600;
       font-size: 0.85rem;
     }
+
     .card-posts {
-      color: #64748b;
+      color: var(--text-secondary);
       font-size: 0.9rem;
       display: flex;
       align-items: center;
       gap: 5px;
     }
+
     .card-link {
       margin-top: 15px;
       padding-top: 15px;
-      border-top: 1px solid #e5e7eb;
+      border-top: 1px solid var(--border);
     }
+
     .card-link a {
-      color: #667eea;
+      color: var(--cta);
       text-decoration: none;
       font-weight: 500;
       font-size: 0.9rem;
+      transition: color var(--transition-base);
     }
+
     .card-link a:hover {
+      color: var(--cta-hover);
       text-decoration: underline;
     }
+
+    .loading,
     .empty {
       text-align: center;
       color: white;
-      padding: 60px 20px;
       font-size: 1.1rem;
       background: rgba(255,255,255,0.1);
-      border-radius: 16px;
+      border-radius: var(--radius-xl);
+      padding: 60px 20px;
+      backdrop-filter: blur(10px);
     }
-    .refresh-btn {
-      display: block;
-      margin: 0 auto 30px;
-      padding: 12px 30px;
-      background: white;
-      color: #667eea;
-      border: none;
-      border-radius: 25px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
     }
-    .refresh-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
-    .refresh-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+
+    .error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      color: #991b1b;
     }
+
     .data-info {
       background: rgba(255,255,255,0.95);
-      border-radius: 12px;
+      border-radius: var(--radius-lg);
       padding: 20px;
       margin-bottom: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-md);
     }
+
     .data-info h3 {
       margin-bottom: 15px;
-      color: #1e293b;
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
+
     .data-info-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 15px;
     }
+
     .info-card {
-      background: #f8fafc;
+      background: var(--bg-secondary);
       padding: 15px;
-      border-radius: 8px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
     }
+
     .info-label {
       font-size: 0.85rem;
-      color: #64748b;
+      color: var(--text-secondary);
       margin-bottom: 5px;
     }
+
     .info-value {
       font-size: 1.2rem;
       font-weight: 700;
-      color: #1e293b;
+      color: var(--text-primary);
+    }
+
+    /* Skeleton Loading */
+    .skeleton {
+      background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 4px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .skeleton-card {
+      height: 180px;
+    }
+
+    /* SVG Icons */
+    .icon {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .status {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .tabs {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .tab {
+        justify-content: center;
+      }
+    }
+
+    /* Dark Mode Support */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+      }
+
+      .card,
+      .data-info,
+      .info-card {
+        background: #1e293b;
+        border-color: #334155;
+      }
+
+      .card-title,
+      .info-value {
+        color: #f1f5f9;
+      }
+
+      .card-posts {
+        color: #94a3b8;
+      }
+
+      .card-rank {
+        background: #451a03;
+        color: #fcd34d;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>📱 TikTok 热门趋势</h1>
+    <h1>TikTok 热门趋势</h1>
     <p class="subtitle">实时爬取 TikTok Creative Center 数据</p>
 
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab('hashtags')">🏷️ 热门标签</button>
-      <button class="tab" onclick="switchTab('songs')">🎵 热门歌曲</button>
-      <button class="tab" onclick="switchTab('videos')">🎬 热门视频</button>
+    <div class="tabs" role="tablist">
+      <button class="tab active" onclick="switchTab('hashtags')" role="tab" aria-selected="true" tabindex="0">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+          <line x1="7" y1="7" x2="7.01" y2="7"></line>
+        </svg>
+        热门标签
+      </button>
+      <button class="tab" onclick="switchTab('songs')" role="tab" aria-selected="false" tabindex="-1">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18V5l12-2v13"></path>
+          <circle cx="6" cy="18" r="3"></circle>
+          <circle cx="18" cy="16" r="3"></circle>
+        </svg>
+        热门歌曲
+      </button>
+      <button class="tab" onclick="switchTab('videos')" role="tab" aria-selected="false" tabindex="-1">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+          <line x1="7" y1="2" x2="7" y2="22"></line>
+          <line x1="17" y1="2" x2="17" y2="22"></line>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <line x1="2" y1="7" x2="7" y2="7"></line>
+          <line x1="2" y1="17" x2="7" y2="17"></line>
+          <line x1="17" y1="17" x2="22" y2="17"></line>
+          <line x1="17" y1="7" x2="22" y2="7"></line>
+        </svg>
+        热门视频
+      </button>
     </div>
 
     <div class="status">
@@ -239,10 +475,20 @@
       </div>
     </div>
 
-    <button class="refresh-btn" onclick="loadData()">🔄 刷新数据</button>
+    <button class="refresh-btn" onclick="loadData()" id="refreshBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-right:8px;">
+        <path d="M23 4v6h-6"></path>
+        <path d="M1 20v-6h6"></path>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+      </svg>
+      刷新数据
+    </button>
 
-    <div id="content">
-      <div class="loading">⏳ 正在从 TikTok Creative Center 爬取数据...</div>
+    <div id="content" role="region" aria-live="polite">
+      <div class="loading">
+        <div class="loading-spinner"></div>
+        <div>正在从 TikTok Creative Center 爬取数据...</div>
+      </div>
     </div>
   </div>
 
@@ -252,14 +498,32 @@
 
     function switchTab(tab) {
       currentTab = tab;
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+      // Update tab states
+      document.querySelectorAll('.tab').forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+        t.setAttribute('tabindex', '-1');
+      });
       event.target.classList.add('active');
+      event.target.setAttribute('aria-selected', 'true');
+      event.target.setAttribute('tabindex', '0');
+
       loadData();
     }
 
     async function loadData() {
       const content = document.getElementById('content');
-      content.innerHTML = '<div class="loading">⏳ 正在从 TikTok Creative Center 爬取数据...</div>';
+      const refreshBtn = document.getElementById('refreshBtn');
+
+      content.innerHTML = `
+        <div class="loading">
+          <div class="loading-spinner"></div>
+          <div>正在从 TikTok Creative Center 爬取数据...</div>
+        </div>
+      `;
+
+      refreshBtn.disabled = true;
 
       try {
         const endpoint = currentTab === 'hashtags' ? '/hashtags'
@@ -274,8 +538,13 @@
         } else {
           content.innerHTML = `
             <div class="empty">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:16px;">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
               <h3>暂无数据</h3>
-              <p>TikTok Creative Center 访问成功，但未能提取到标签数据</p>
+              <p>TikTok Creative Center 访问成功，但未能提取到数据</p>
               <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8;">可能原因：页面结构变化或需要调整选择器</p>
             </div>
           `;
@@ -283,11 +552,20 @@
       } catch (error) {
         content.innerHTML = `
           <div class="error">
-            <h3>❌ 加载失败</h3>
+            <h3>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-right:8px;">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              加载失败
+            </h3>
             <p>${error.message}</p>
             <p>请确保后端服务正在运行: http://localhost:3000</p>
           </div>
         `;
+      } finally {
+        refreshBtn.disabled = false;
       }
     }
 
@@ -297,7 +575,15 @@
       if (currentTab === 'hashtags') {
         content.innerHTML = `
           <div class="data-info">
-            <h3>📊 数据统计</h3>
+            <h3>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 3v18h18"></path>
+                <path d="M18 17V9"></path>
+                <path d="M13 17V5"></path>
+                <path d="M8 17v-3"></path>
+              </svg>
+              数据统计
+            </h3>
             <div class="data-info-grid">
               <div class="info-card">
                 <div class="info-label">爬取数量</div>
@@ -309,41 +595,76 @@
               </div>
             </div>
           </div>
-          <div class="grid">
+          <div class="grid" role="list">
             ${items.map(item => `
-              <div class="card">
+              <div class="card" tabindex="0" role="listitem">
                 <div class="card-header">
                   <div class="card-title">${item.name}</div>
                   ${item.rank ? `<div class="card-rank">#${item.rank}</div>` : ''}
                 </div>
-                ${item.posts ? `<div class="card-posts">📈 ${item.posts}</div>` : ''}
-                ${item.fullText ? `<div style="margin-top:10px;color:#64748b;font-size:0.85rem;">${item.fullText}</div>` : ''}
-                ${item.link ? `<div class="card-link"><a href="${item.link}" target="_blank">查看详情 →</a></div>` : ''}
+                ${item.posts ? `<div class="card-posts">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;">
+                    <path d="M23 6l-9.5 9.5-5-5L1 18"></path>
+                    <path d="M17 6h6v6"></path>
+                  </svg>
+                  ${item.posts}
+                </div>` : ''}
+                ${item.fullText ? `<div style="margin-top:10px;color:var(--text-secondary);font-size:0.85rem;">${item.fullText}</div>` : ''}
+                ${item.link ? `<div class="card-link"><a href="${item.link}" target="_blank" rel="noopener">查看详情 →</a></div>` : ''}
               </div>
             `).join('')}
           </div>
         `;
       } else if (currentTab === 'songs') {
         content.innerHTML = `
-          <div class="grid">
+          <div class="grid" role="list">
             ${items.map(item => `
-              <div class="card">
+              <div class="card" tabindex="0" role="listitem">
                 <div class="card-title">${item.title}</div>
-                ${item.artist ? `<div style="color:#64748b;margin:10px 0;">🎤 ${item.artist}</div>` : ''}
-                ${item.plays ? `<div class="card-posts">▶️ ${item.plays.toLocaleString()} 播放</div>` : ''}
+                ${item.artist ? `<div style="color:var(--text-secondary);margin:10px 0;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-right:4px;">
+                    <path d="M9 18V5l12-2v13"></path>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <circle cx="18" cy="16" r="3"></circle>
+                  </svg>
+                  ${item.artist}
+                </div>` : ''}
+                ${item.plays ? `<div class="card-posts">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                  ${item.plays.toLocaleString()} 播放
+                </div>` : ''}
               </div>
             `).join('')}
           </div>
         `;
       } else {
         content.innerHTML = `
-          <div class="grid">
+          <div class="grid" role="list">
             ${items.map(item => `
-              <div class="card">
+              <div class="card" tabindex="0" role="listitem">
                 <div class="card-title">${item.title}</div>
-                ${item.views ? `<div class="card-posts">👁️ ${item.views.toLocaleString()} 观看</div>` : ''}
-                ${item.likes ? `<div class="card-posts">❤️ ${item.likes.toLocaleString()} 点赞</div>` : ''}
-                ${item.author ? `<div style="color:#64748b;margin-top:10px;">👤 ${item.author}</div>` : ''}
+                ${item.views ? `<div class="card-posts">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  ${item.views.toLocaleString()} 观看
+                </div>` : ''}
+                ${item.likes ? `<div class="card-posts">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                  ${item.likes.toLocaleString()} 点赞
+                </div>` : ''}
+                ${item.author ? `<div style="color:var(--text-secondary);margin-top:10px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-right:4px;">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  ${item.author}
+                </div>` : ''}
               </div>
             `).join('')}
           </div>
@@ -351,7 +672,23 @@
       }
     }
 
-    // 初始加载
+    // Keyboard navigation for tabs
+    document.querySelectorAll('.tab').forEach((tab, index, tabs) => {
+      tab.addEventListener('keydown', (e) => {
+        let target;
+        if (e.key === 'ArrowRight') {
+          target = tabs[(index + 1) % tabs.length];
+        } else if (e.key === 'ArrowLeft') {
+          target = tabs[(index - 1 + tabs.length) % tabs.length];
+        }
+        if (target) {
+          target.click();
+          target.focus();
+        }
+      });
+    });
+
+    // Initial load
     loadData();
   </script>
 </body>

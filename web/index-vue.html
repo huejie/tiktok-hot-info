@@ -1,0 +1,2839 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok B2B 工厂出口信息平台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    :root {
+      --primary: #0F172A;
+      --cta: #0369A1;
+      --cta-hover: #0284c7;
+      --bg-primary: #ffffff;
+      --bg-secondary: #F8FAFC;
+      --text-primary: #020617;
+      --text-secondary: #475569;
+      --text-tertiary: #94a3b8;
+      --border: #e2e8f0;
+      --success: #52c41a;
+      --warning: #fa8c16;
+      --danger: #ef4444;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(3, 105, 161, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(3, 105, 161, 0.6); }
+    }
+
+    @keyframes gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .fade-in-up { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
+    .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+    .float { animation: float 3s ease-in-out infinite; }
+    .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+
+    .stagger-1 { animation-delay: 0.1s; }
+    .stagger-2 { animation-delay: 0.2s; }
+    .stagger-3 { animation-delay: 0.3s; }
+
+    /* Header */
+    .header {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: opacity 0.2s;
+    }
+
+    .logo:hover { opacity: 0.8; }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--cta), var(--cta-hover));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(3, 105, 161, 0.25);
+      transition: all 0.3s;
+    }
+
+    .logo:hover .logo-icon {
+      transform: scale(1.05);
+      box-shadow: 0 8px 16px rgba(3, 105, 161, 0.35);
+    }
+
+    .logo-text h1 { font-size: 18px; font-weight: 700; }
+    .logo-text p { font-size: 13px; color: var(--text-secondary); }
+
+    /* Container */
+    .container { max-width: 1280px; margin: 0 auto; padding: 24px; }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--cta) 0%, var(--primary) 100%);
+      background-size: 200% 200%;
+      animation: gradient-shift 8s ease infinite;
+      border-radius: 16px;
+      padding: 48px 32px;
+      color: white;
+      margin-bottom: 32px;
+      box-shadow: 0 10px 40px rgba(15, 23, 42, 0.15);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      opacity: 0.5;
+    }
+
+    .hero h2 {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 700;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: clamp(14px, 2vw, 18px);
+      opacity: 0.95;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card:hover {
+      transform: scale(1.05);
+      border-color: rgba(255,255,255,0.3);
+    }
+
+    .stat-label { font-size: 13px; opacity: 0.9; margin-bottom: 4px; }
+    .stat-value { font-size: 28px; font-weight: 700; }
+
+    /* Section */
+    .section {
+      background: var(--bg-primary);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-icon { width: 24px; height: 24px; color: var(--cta); }
+
+    /* Industry Grid */
+    .industry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 16px;
+    }
+
+    .industry-card {
+      background: var(--bg-secondary);
+      border: 2px solid transparent;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .industry-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+    }
+
+    .industry-card.active {
+      background: var(--cta);
+      color: white;
+      border-color: var(--cta);
+      box-shadow: 0 8px 24px rgba(3, 105, 161, 0.35);
+    }
+
+    .industry-icon { width: 40px; height: 40px; }
+    .industry-name { font-size: 14px; font-weight: 600; }
+
+    /* Factory Grid */
+    .factory-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 24px;
+    }
+
+    .factory-card {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .factory-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+    }
+
+    .factory-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .factory-content { padding: 16px; }
+
+    .factory-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .factory-info h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .export-score {
+      text-align: center;
+      padding: 8px;
+      background: #eff6ff;
+      border-radius: 8px;
+      min-width: 80px;
+    }
+
+    .score-label { font-size: 11px; color: var(--text-tertiary); }
+    .score-value { font-size: 24px; font-weight: 700; color: var(--cta); }
+
+    .tag {
+      padding: 4px 12px;
+      background: var(--bg-primary);
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: inline-block;
+    }
+
+    .tag.hot {
+      background: linear-gradient(135deg, var(--danger), #f87171);
+      color: white;
+    }
+
+    .factory-stats {
+      display: flex;
+      justify-content: space-around;
+      padding: 16px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .factory-stat { text-align: center; }
+    .factory-stat .value { font-size: 18px; font-weight: 700; }
+    .factory-stat .label { font-size: 12px; color: var(--text-tertiary); }
+
+    /* Search */
+    .search-container {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--cta);
+      box-shadow: 0 0 0 4px rgba(3, 105, 161, 0.1);
+    }
+
+    .btn {
+      padding: 12px 24px;
+      background: var(--cta);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:hover { background: var(--cta-hover); }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::after { left: 100%; }
+
+    /* Loading */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 4px;
+    }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--border);
+      border-top-color: var(--cta);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading, .empty {
+      text-align: center;
+      padding: 48px;
+      color: var(--text-tertiary);
+    }
+
+    /* Report Button */
+    .report-btn {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--cta), var(--cta-hover));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 8px 32px rgba(3, 105, 161, 0.4);
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 3px solid white;
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    .report-btn:hover { transform: scale(1.1); }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-content {
+      background: var(--bg-primary);
+      border-radius: 16px;
+      max-width: 700px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 32px;
+      box-shadow: 0 20px 60px rgba(15, 23, 42, 0.3);
+      animation: fadeInUp 0.3s ease-out;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title { font-size: 22px; font-weight: 700; }
+
+    .modal-close {
+      width: 36px;
+      height: 36px;
+      background: var(--bg-secondary);
+      border: none;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+
+    .modal-close:hover { background: var(--bg-primary); }
+
+    /* Table */
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table th, .table td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .table th {
+      background: var(--bg-secondary);
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .table tbody tr:hover { background: var(--bg-secondary); }
+
+    /* Poster Modal - Optimized */
+    .poster-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 16px;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .poster-modal {
+        animation: none;
+      }
+    }
+
+    .poster-content {
+      background: var(--bg-primary);
+      border-radius: 24px;
+      max-width: 1000px;
+      width: 100%;
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 40px;
+      box-shadow: 0 30px 100px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(255,255,255,0.1) inset;
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .poster-content {
+        animation: none;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .modal-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #F59E0B, #F97316);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+    }
+
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.5px;
+    }
+
+    .modal-close {
+      width: 40px;
+      height: 40px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--text-secondary);
+    }
+
+    .modal-close:hover {
+      background: var(--bg-primary);
+      border-color: var(--cta);
+      color: var(--cta);
+      transform: scale(1.05);
+    }
+
+    .modal-close:active {
+      transform: scale(0.95);
+    }
+
+    .poster-preview-wrapper {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+    }
+
+    .poster-canvas-wrapper {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #F8FAFC, #F1F5F9);
+      border-radius: 16px;
+      padding: 32px;
+      min-height: 500px;
+      border: 1px solid var(--border);
+      box-shadow: inset 0 2px 8px rgba(15, 23, 42, 0.05);
+    }
+
+    .poster-canvas {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .poster-canvas:hover {
+      transform: scale(1.02);
+    }
+
+    .poster-controls {
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .control-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .control-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .poster-section-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .poster-section-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--cta);
+    }
+
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .template-option {
+      padding: 16px 12px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      background: var(--bg-secondary);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .template-option::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--cta), var(--cta-hover));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .template-option:hover {
+      border-color: var(--cta);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(3, 105, 161, 0.15);
+    }
+
+    .template-option.active {
+      border-color: var(--cta);
+      background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
+      box-shadow: 0 4px 16px rgba(3, 105, 161, 0.2);
+    }
+
+    .template-option.active::before {
+      opacity: 0.05;
+    }
+
+    .template-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .template-icon {
+      font-size: 28px;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .template-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: block;
+    }
+
+    .template-option.active .template-name {
+      color: var(--cta);
+    }
+
+    .info-card {
+      background: linear-gradient(135deg, #F8FAFC, #F1F5F9);
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 13px;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .info-value {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .poster-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn-poster {
+      width: 100%;
+      min-height: 48px;
+      padding: 14px 20px;
+      border-radius: 12px;
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-poster svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .btn-poster.primary {
+      background: linear-gradient(135deg, var(--cta), var(--cta-hover));
+      color: white;
+      box-shadow: 0 4px 16px rgba(3, 105, 161, 0.25);
+    }
+
+    .btn-poster.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(3, 105, 161, 0.35);
+    }
+
+    .btn-poster.primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-poster.secondary {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      border: 2px solid var(--border);
+    }
+
+    .btn-poster.secondary:hover {
+      background: var(--bg-secondary);
+      border-color: var(--cta);
+      color: var(--cta);
+      transform: translateY(-1px);
+    }
+
+    .btn-poster:active {
+      transform: scale(0.98);
+    }
+
+    /* Poster Button on Card */
+    .poster-btn {
+      width: 100%;
+      min-height: 48px;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, var(--cta), var(--cta-hover));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 16px;
+      box-shadow: 0 4px 16px rgba(3, 105, 161, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .poster-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .poster-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(3, 105, 161, 0.3);
+    }
+
+    .poster-btn:hover::before {
+      left: 100%;
+    }
+
+    .poster-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .poster-btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    /* Loading State */
+    .poster-loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      gap: 16px;
+    }
+
+    .loading-spinner-lg {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--border);
+      border-top-color: var(--cta);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .loading-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* Success Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #10B981;
+      color: white;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 12px 32px rgba(16, 185, 129, 0.3);
+      z-index: 300;
+      animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    @keyframes toastIn {
+      to {
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    .toast.hiding {
+      animation: toastOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes toastOut {
+      to {
+        transform: translateX(-50%) translateY(100px);
+        opacity: 0;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .poster-preview-wrapper {
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .poster-controls {
+        width: 100%;
+      }
+
+      .template-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .poster-content {
+        padding: 24px;
+        border-radius: 20px;
+      }
+
+      .modal-title {
+        font-size: 20px;
+      }
+
+      .poster-canvas-wrapper {
+        padding: 20px;
+        min-height: 300px;
+      }
+
+      .template-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .poster-modal {
+        padding: 12px;
+      }
+    }
+
+    /* Focus styles for accessibility */
+    .btn-poster:focus-visible,
+    .modal-close:focus-visible,
+    .template-option:focus-visible {
+      outline: 2px solid var(--cta);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <a href="#" class="logo">
+          <div class="logo-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <h1>TikTok B2B</h1>
+            <p>工厂出口信息平台</p>
+          </div>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="fade-in-up">
+          <span style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 9999px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 500; margin-bottom: 16px; backdrop-filter: blur(4px);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #fbbf24;">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            实时数据驱动决策
+          </span>
+        </div>
+
+        <h2 class="fade-in-up stagger-1">
+          助力中国工厂
+          <br />
+          <span style="color: hsl(199, 89%, 65%);">开拓全球市场</span>
+        </h2>
+
+        <p class="fade-in-up stagger-2">
+          实时追踪 TikTok 各地区行业热点，分析出口潜力，辅助您的业务决策。
+          数据驱动，精准定位，让每一份投入都物超所值。
+        </p>
+
+        <div class="stats-grid fade-in-up stagger-3">
+          <div class="stat-card">
+            <div style="display: flex; align-items: center; gap: 6px; opacity: 0.9; font-size: 13px; margin-bottom: 4px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+              </svg>
+              覆盖地区
+            </div>
+            <div class="stat-value">4</div>
+          </div>
+          <div class="stat-card">
+            <div style="display: flex; align-items: center; gap: 6px; opacity: 0.9; font-size: 13px; margin-bottom: 4px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+              </svg>
+              行业分类
+            </div>
+            <div class="stat-value">8</div>
+          </div>
+          <div class="stat-card">
+            <div style="display: flex; align-items: center; gap: 6px; opacity: 0.9; font-size: 13px; margin-bottom: 4px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              </svg>
+              工厂数据
+            </div>
+            <div class="stat-value">640+</div>
+          </div>
+          <div class="stat-card">
+            <div style="display: flex; align-items: center; gap: 6px; opacity: 0.9; font-size: 13px; margin-bottom: 4px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #fbbf24;">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              每周更新
+            </div>
+            <div class="stat-value">实时</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Search Section -->
+      <section class="section">
+        <div class="search-container">
+          <input
+            type="text"
+            class="search-input"
+            v-model="searchKeyword"
+            @keyup.enter="handleSearch"
+            placeholder="搜索行业：纺织、电子、机械、化工..."
+          >
+          <button class="btn" @click="handleSearch">搜索</button>
+        </div>
+
+        <div class="section-title">
+          <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+          选择行业
+        </div>
+
+        <div v-if="loading.industries" class="loading">
+          <div class="loading-spinner"></div>
+          <div>加载中...</div>
+        </div>
+
+        <div v-else-if="industries.length > 0" class="industry-grid">
+          <div
+            v-for="industry in industries"
+            :key="industry.id"
+            class="industry-card"
+            :class="{ active: selectedIndustry?.id === industry.id }"
+            @click="selectIndustry(industry)"
+          >
+            <div class="industry-icon" v-html="industry.icon"></div>
+            <div class="industry-name">{{ industry.name }}</div>
+          </div>
+        </div>
+
+        <div v-else class="empty">
+          <div>暂无数据</div>
+        </div>
+      </section>
+
+      <!-- Overview Section -->
+      <section class="section" v-if="selectedIndustry">
+        <div class="section-title">
+          <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3v18h18"></path>
+            <path d="M18 17V9"></path>
+            <path d="M13 17V5"></path>
+            <path d="M8 17v-3"></path>
+          </svg>
+          {{ selectedIndustry.name }} 出口概况
+        </div>
+
+        <div v-if="loading.overview" class="loading">
+          <div class="loading-spinner"></div>
+          <div>加载中...</div>
+        </div>
+
+        <div v-else-if="overviewData.length > 0" class="stats-grid">
+          <div v-for="(item, index) in overviewData" :key="index" class="stat-card" style="background: var(--bg-secondary); color: var(--text-primary);">
+            <div class="factory-header">
+              <span style="font-size: 16px; font-weight: 700;">{{ item.region }}</span>
+              <span style="font-size: 24px;">{{ item.flag }}</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 16px 0;">
+              <div style="text-align: center;">
+                <div style="font-size: 12px; color: var(--text-tertiary);">工厂数</div>
+                <div style="font-size: 20px; font-weight: 700; color: var(--cta);">{{ item.totalFactories }}</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 12px; color: var(--text-tertiary);">播放量</div>
+                <div style="font-size: 20px; font-weight: 700; color: var(--cta);">{{ formatNumber(item.totalViews) }}</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 12px; color: var(--text-tertiary);">询盘数</div>
+                <div style="font-size: 20px; font-weight: 700; color: var(--cta);">{{ formatNumber(item.totalInquiries) }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Factory Section -->
+      <section class="section" v-if="selectedIndustry">
+        <div class="section-title">
+          <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+          </svg>
+          优质工厂推荐
+          <span style="font-size: 14px; color: var(--text-tertiary); font-weight: 400; margin-left: 8px;">({{ factories.length }}家)</span>
+        </div>
+
+        <div v-if="loading.factories" class="loading">
+          <div class="loading-spinner"></div>
+          <div>加载中...</div>
+        </div>
+
+        <div v-else-if="factories.length > 0" class="factory-grid">
+          <div v-for="factory in factories" :key="factory.id" class="factory-card">
+            <img class="factory-image" :src="factory.video.coverImage" :alt="factory.factory.name" loading="lazy">
+            <div class="factory-content">
+              <div class="factory-header">
+                <div class="factory-info">
+                  <h3>{{ factory.factory.name }}</h3>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <span class="tag">{{ factory.factory.scale }}</span>
+                    <span v-if="factory.stats.views > 100000" class="tag hot">爆款</span>
+                  </div>
+                </div>
+                <div class="export-score">
+                  <div class="score-label">出口潜力</div>
+                  <div class="score-value">{{ calculateExportScore(factory) }}</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; padding: 8px; background: var(--bg-primary); border-radius: 6px; margin-bottom: 16px; font-size: 13px; color: var(--text-secondary);">
+                出口国家：{{ factory.export.targetCountries.length }}个 | {{ factory.export.mainMarkets.slice(0,3).join('、') }}
+              </div>
+              <div class="factory-stats">
+                <div class="factory-stat">
+                  <div class="value">{{ formatNumber(factory.stats.views) }}</div>
+                  <div class="label">播放</div>
+                </div>
+                <div class="factory-stat">
+                  <div class="value">{{ formatNumber(factory.stats.followers) }}</div>
+                  <div class="label">粉丝</div>
+                </div>
+                <div class="factory-stat">
+                  <div class="value">{{ factory.stats.inquiryCount }}</div>
+                  <div class="label">询盘</div>
+                </div>
+              </div>
+              <button class="poster-btn" @click="generatePoster(factory)" aria-label="生成海报">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                <span>生成海报</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="empty">
+          <div>暂无工厂数据</div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Report Button -->
+    <div class="report-btn" @click="showReport">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 3v18h18"></path>
+        <path d="M18 17V9"></path>
+        <path d="M13 17V5"></path>
+        <path d="M8 17v-3"></path>
+      </svg>
+    </div>
+
+    <!-- Report Modal -->
+    <div class="modal" v-if="showReportModal" @click.self="closeReport" role="dialog" aria-modal="true" aria-labelledby="report-title">
+      <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+          <div class="modal-title-wrapper">
+            <div class="modal-icon" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            </div>
+            <h3 id="report-title" class="modal-title">每周市场报告</h3>
+          </div>
+          <button class="modal-close" @click="closeReport" aria-label="关闭模态框">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div v-if="reportData">
+          <div style="margin-bottom: 24px;">
+            <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: var(--text-primary);">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px; color: #8B5CF6;">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              {{ reportData.week }}
+            </h4>
+            <div v-for="(highlight, index) in reportData.highlights" :key="index" style="background: linear-gradient(135deg, #F5F3FF, #EDE9FE); padding: 16px; border-radius: 12px; margin-bottom: 12px; font-size: 14px; color: var(--text-primary); border: 1px solid #E9D5FF;">
+              <span style="color: #8B5CF6; font-weight: 600; margin-right: 8px;">{{ index + 1 }}.</span>
+              {{ highlight }}
+            </div>
+          </div>
+
+          <!-- Generate Poster Button -->
+          <button class="btn-poster primary" @click="generateReportPoster" aria-label="生成报告海报" style="width: 100%;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span>生成海报</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Report Poster Modal -->
+    <div class="poster-modal" v-if="showReportPosterModal" @click.self="closeReportPoster" role="dialog" aria-modal="true" aria-labelledby="report-poster-title">
+      <div class="poster-content">
+        <div class="modal-header">
+          <div class="modal-title-wrapper">
+            <div class="modal-icon" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED);">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+            </div>
+            <h3 id="report-poster-title" class="modal-title">每周报告海报</h3>
+          </div>
+          <button class="modal-close" @click="closeReportPoster" aria-label="关闭模态框">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="poster-preview-wrapper">
+          <!-- Canvas Preview -->
+          <div class="poster-canvas-wrapper">
+            <div v-if="loadingReportPoster" class="poster-loading">
+              <div class="loading-spinner-lg"></div>
+              <div class="loading-text">正在生成报告海报...</div>
+            </div>
+            <canvas v-show="!loadingReportPoster" ref="reportPosterCanvas" class="poster-canvas" width="750" height="1334"></canvas>
+          </div>
+
+          <!-- Controls -->
+          <div class="poster-controls">
+            <!-- Template Selection -->
+            <div class="control-section">
+              <div class="control-header">
+                <div class="poster-section-title">
+                  <svg class="poster-section-icon" style="color: #8B5CF6;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                  </svg>
+                  <span>选择模板</span>
+                </div>
+              </div>
+              <div class="template-grid">
+                <div
+                  v-for="template in reportTemplates"
+                  :key="template.id"
+                  class="template-option"
+                  :class="{ active: selectedReportTemplate === template.id }"
+                  @click="selectReportTemplate(template.id)"
+                  :aria-label="'选择' + template.name + '模板'"
+                  :aria-pressed="selectedReportTemplate === template.id"
+                  tabindex="0"
+                  @keydown.enter="selectReportTemplate(template.id)"
+                >
+                  <div class="template-content">
+                    <span class="template-icon">{{ template.icon }}</span>
+                    <span class="template-name">{{ template.name }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Report Info -->
+            <div class="control-section" v-if="reportData">
+              <div class="control-header">
+                <div class="poster-section-title">
+                  <svg class="poster-section-icon" style="color: #8B5CF6;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></line>
+                  </svg>
+                  <span>报告信息</span>
+                </div>
+              </div>
+              <div class="info-card" style="background: linear-gradient(135deg, #F5F3FF, #EDE9FE); border-color: #E9D5FF;">
+                <div class="info-row">
+                  <span class="info-label">报告周期</span>
+                  <span class="info-value">{{ reportData.week }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">亮点数量</span>
+                  <span class="info-value">{{ reportData.highlights?.length || 0 }} 条</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">生成时间</span>
+                  <span class="info-value">{{ formatDate() }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="poster-actions">
+              <button class="btn-poster secondary" @click="regenerateReportPoster" aria-label="重新生成报告海报">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <polyline points="1 20 1 14 7 14"></polyline>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+                <span>重新生成</span>
+              </button>
+              <button class="btn-poster primary" @click="downloadReportPoster" aria-label="下载报告海报" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED); box-shadow: 0 4px 16px rgba(139, 92, 246, 0.25);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>下载海报</span>
+              </button>
+            </div>
+
+            <!-- Tips -->
+            <div class="info-card" style="background: linear-gradient(135deg, #FEF3C7, #FDE68A); border-color: #FBBF24;">
+              <div style="display: flex; gap: 8px; font-size: 13px; color: #92400E;">
+                <svg style="width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <span style="font-weight: 500;">报告海报适合分享到团队和客户</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Factory Poster Modal -->
+    <div class="poster-modal" v-if="showPosterModal" @click.self="closePoster" role="dialog" aria-modal="true" aria-labelledby="poster-title">
+      <div class="poster-content">
+        <div class="modal-header">
+          <div class="modal-title-wrapper">
+            <div class="modal-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+            </div>
+            <h3 id="poster-title" class="modal-title">生成海报</h3>
+          </div>
+          <button class="modal-close" @click="closePoster" aria-label="关闭模态框">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="poster-preview-wrapper">
+          <!-- Canvas Preview -->
+          <div class="poster-canvas-wrapper">
+            <div v-if="loadingPoster" class="poster-loading">
+              <div class="loading-spinner-lg"></div>
+              <div class="loading-text">正在生成海报...</div>
+            </div>
+            <canvas v-show="!loadingPoster" ref="posterCanvas" class="poster-canvas" width="750" height="1334"></canvas>
+          </div>
+
+          <!-- Controls -->
+          <div class="poster-controls">
+            <!-- Template Selection -->
+            <div class="control-section">
+              <div class="control-header">
+                <div class="poster-section-title">
+                  <svg class="poster-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                  <span>选择模板</span>
+                </div>
+              </div>
+              <div class="template-grid">
+                <div
+                  v-for="template in posterTemplates"
+                  :key="template.id"
+                  class="template-option"
+                  :class="{ active: selectedTemplate === template.id }"
+                  @click="selectTemplate(template.id)"
+                  :aria-label="'选择' + template.name + '模板'"
+                  :aria-pressed="selectedTemplate === template.id"
+                  tabindex="0"
+                  @keydown.enter="selectTemplate(template.id)"
+                >
+                  <div class="template-content">
+                    <span class="template-icon">{{ template.icon }}</span>
+                    <span class="template-name">{{ template.name }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Factory Info -->
+            <div class="control-section" v-if="currentFactory">
+              <div class="control-header">
+                <div class="poster-section-title">
+                  <svg class="poster-section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 3v18h18"></path>
+                    <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"></path>
+                  </svg>
+                  <span>海报信息</span>
+                </div>
+              </div>
+              <div class="info-card">
+                <div class="info-row">
+                  <span class="info-label">工厂名称</span>
+                  <span class="info-value">{{ currentFactory.factory?.name }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">所属地区</span>
+                  <span class="info-value">{{ currentFactory.region || '北美' }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">播放量</span>
+                  <span class="info-value">{{ formatNumber(currentFactory.stats?.views || 0) }}</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">询盘数</span>
+                  <span class="info-value">{{ currentFactory.stats?.inquiryCount || 0 }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="poster-actions">
+              <button class="btn-poster secondary" @click="regeneratePoster" aria-label="重新生成海报">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <polyline points="1 20 1 14 7 14"></polyline>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+                <span>重新生成</span>
+              </button>
+              <button class="btn-poster primary" @click="downloadPoster" aria-label="下载海报到本地">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>下载海报</span>
+              </button>
+            </div>
+
+            <!-- Tips -->
+            <div class="info-card" style="background: linear-gradient(135deg, #FEF3C7, #FDE68A); border-color: #FBBF24;">
+              <div style="display: flex; gap: 8px; font-size: 13px; color: #92400E;">
+                <svg style="width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+                <span style="font-weight: 500;">选择不同模板可实时预览海报风格</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="toast" v-if="showToast">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span>海报已成功下载！</span>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          API_BASE: 'http://localhost:3000/api',
+          industries: [],
+          selectedIndustry: null,
+          searchKeyword: '',
+          factories: [],
+          overviewData: [],
+          reportData: null,
+          showReportModal: false,
+          showReportPosterModal: false,
+          showPosterModal: false,
+          showToast: false,
+          loadingPoster: false,
+          loadingReportPoster: false,
+          currentFactory: null,
+          selectedTemplate: 'business',
+          selectedReportTemplate: 'report-business',
+          posterTemplates: [
+            { id: 'business', name: '商务专业', icon: '💼' },
+            { id: 'minimal', name: '极简风格', icon: '✨' },
+            { id: 'gradient', name: '渐变潮流', icon: '🔥' },
+            { id: 'factory', name: '工厂推荐', icon: '🏭' },
+            { id: 'product', name: '产品展示', icon: '📦' }
+          ],
+          reportTemplates: [
+            { id: 'report-business', name: '商务报告', icon: '📊' },
+            { id: 'report-minimal', name: '简洁报告', icon: '📋' },
+            { id: 'report-gradient', name: '渐变报告', icon: '🌈' },
+            { id: 'report-card', name: '卡片报告', icon: '🎴' },
+            { id: 'report-modern', name: '现代报告', icon: '✨' }
+          ],
+          coverImage: null,
+          loading: {
+            industries: true,
+            overview: false,
+            factories: false
+          }
+        }
+      },
+      mounted() {
+        this.loadIndustries();
+      },
+      methods: {
+        async loadIndustries() {
+          try {
+            const res = await fetch(`${this.API_BASE}/hot/industries`);
+            const data = await res.json();
+            if (data.success) {
+              this.industries = data.data;
+            }
+          } catch (error) {
+            console.error('加载失败:', error);
+          } finally {
+            this.loading.industries = false;
+          }
+        },
+
+        handleSearch() {
+          if (!this.searchKeyword.trim()) return;
+
+          const matched = this.industries.find(ind =>
+            ind.name.includes(this.searchKeyword) ||
+            ind.keywords.some(k => this.searchKeyword.includes(k))
+          );
+
+          if (matched) {
+            this.selectIndustry(matched);
+          }
+        },
+
+        async selectIndustry(industry) {
+          this.selectedIndustry = industry;
+          await Promise.all([
+            this.loadOverview(industry.id),
+            this.loadFactories(industry.id)
+          ]);
+
+          setTimeout(() => {
+            document.getElementById('overviewSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100);
+        },
+
+        async loadOverview(industryId) {
+          this.loading.overview = true;
+          try {
+            const res = await fetch(`${this.API_BASE}/hot/overview`);
+            const data = await res.json();
+
+            if (data.success) {
+              const flagMap = { 'north-america': '🇺🇸', 'europe': '🇪🇺', 'southeast-asia': '🇸🇬', 'africa': '🇿🇦' };
+              this.overviewData = Object.entries(data.data)
+                .map(([regionId, regionData]) => {
+                  const indData = regionData.industries[industryId];
+                  return indData ? {
+                    region: regionData.region,
+                    flag: flagMap[regionId] || '🌍',
+                    totalFactories: indData.totalFactories,
+                    totalViews: indData.totalViews,
+                    totalInquiries: indData.totalInquiries
+                  } : null;
+                })
+                .filter(Boolean);
+            }
+          } catch (error) {
+            console.error('加载概况失败:', error);
+          } finally {
+            this.loading.overview = false;
+          }
+        },
+
+        async loadFactories(industryId) {
+          this.loading.factories = true;
+          try {
+            const res = await fetch(`${this.API_BASE}/hot/search?industry=${industryId}&limit=12`);
+            const data = await res.json();
+
+            if (data.success) {
+              this.factories = data.data;
+            }
+          } catch (error) {
+            console.error('加载工厂失败:', error);
+          } finally {
+            this.loading.factories = false;
+          }
+        },
+
+        async showReport() {
+          try {
+            const res = await fetch(`${this.API_BASE}/hot/weekly-report`);
+            const data = await res.json();
+
+            if (data.success) {
+              this.reportData = data.data;
+              this.showReportModal = true;
+            }
+          } catch (error) {
+            console.error('加载报告失败:', error);
+            alert('加载报告失败');
+          }
+        },
+
+        closeReport() {
+          this.showReportModal = false;
+        },
+
+        // Report Poster Methods
+        async generateReportPoster() {
+          this.showReportModal = false;
+          this.showReportPosterModal = true;
+          this.selectedReportTemplate = 'report-business';
+          this.loadingReportPoster = true;
+
+          // Simulate loading
+          setTimeout(() => {
+            this.loadingReportPoster = false;
+            this.$nextTick(() => {
+              this.drawReportPoster();
+            });
+          }, 600);
+        },
+
+        selectReportTemplate(templateId) {
+          this.selectedReportTemplate = templateId;
+          this.$nextTick(() => {
+            this.drawReportPoster();
+          });
+        },
+
+        regenerateReportPoster() {
+          this.loadingReportPoster = true;
+          setTimeout(() => {
+            this.loadingReportPoster = false;
+            this.$nextTick(() => {
+              this.drawReportPoster();
+            });
+          }, 500);
+        },
+
+        drawReportPoster() {
+          const canvas = this.$refs.reportPosterCanvas;
+          if (!canvas || !this.reportData) return;
+
+          const ctx = canvas.getContext('2d');
+          const width = 750;
+          const height = 1334;
+
+          // Clear canvas
+          ctx.clearRect(0, 0, width, height);
+
+          // Draw based on template
+          switch (this.selectedReportTemplate) {
+            case 'report-business':
+              this.drawReportBusinessStyle(ctx, width, height);
+              break;
+            case 'report-minimal':
+              this.drawReportMinimalStyle(ctx, width, height);
+              break;
+            case 'report-gradient':
+              this.drawReportGradientStyle(ctx, width, height);
+              break;
+            case 'report-card':
+              this.drawReportCardStyle(ctx, width, height);
+              break;
+            case 'report-modern':
+              this.drawReportModernStyle(ctx, width, height);
+              break;
+            default:
+              this.drawReportBusinessStyle(ctx, width, height);
+          }
+        },
+
+        drawReportBusinessStyle(ctx, width, height) {
+          const padding = 50;
+          let currentY = padding;
+
+          // Background - white
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, width, height);
+
+          // Header gradient - purple
+          const headerGradient = ctx.createLinearGradient(0, 0, width, 0);
+          headerGradient.addColorStop(0, '#8B5CF6');
+          headerGradient.addColorStop(1, '#7C3AED');
+          ctx.fillStyle = headerGradient;
+          ctx.fillRect(0, 0, width, 16);
+
+          // Logo and title
+          ctx.fillStyle = '#0F172A';
+          ctx.font = 'bold 32px sans-serif';
+          ctx.textAlign = 'left';
+          ctx.fillText('TB 周刊', padding, currentY + 12);
+
+          // Date
+          ctx.fillStyle = '#64748B';
+          ctx.font = '22px sans-serif';
+          ctx.textAlign = 'right';
+          ctx.fillText(this.formatDate(), width - padding, currentY + 12);
+          currentY += 60;
+
+          // Main title card
+          const titleCardHeight = 140;
+          this.drawRoundedRect(ctx, padding, currentY, width - padding * 2, titleCardHeight, 16);
+          ctx.fillStyle = '#F5F3FF';
+          ctx.fill();
+          ctx.strokeStyle = '#E9D5FF';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Icon
+          ctx.fillStyle = '#8B5CF6';
+          ctx.font = '48px sans-serif';
+          ctx.textAlign = 'left';
+          ctx.fillText('📊', padding + 24, currentY + 50);
+
+          // Title
+          ctx.fillStyle = '#0F172A';
+          ctx.font = 'bold 36px sans-serif';
+          ctx.fillText('每周市场报告', padding + 90, currentY + 50);
+
+          // Week
+          ctx.fillStyle = '#64748B';
+          ctx.font = '24px sans-serif';
+          ctx.fillText(this.reportData.week, padding + 24, currentY + 110);
+
+          currentY += titleCardHeight + 40;
+
+          // Highlights
+          ctx.fillStyle = '#0F172A';
+          ctx.font = 'bold 32px sans-serif';
+          ctx.textAlign = 'left';
+          ctx.fillText('📈 市场亮点', padding, currentY);
+          currentY += 50;
+
+          this.reportData.highlights.forEach((highlight, index) => {
+            const cardHeight = 100;
+            this.drawRoundedRect(ctx, padding, currentY, width - padding * 2, cardHeight, 12);
+            ctx.fillStyle = '#FAFAFA';
+            ctx.fill();
+            ctx.strokeStyle = '#E5E7EB';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // Number badge
+            this.drawRoundedRect(ctx, padding + 16, currentY + 28, 36, 36, 18);
+            ctx.fillStyle = '#8B5CF6';
+            ctx.fill();
+
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 20px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(String(index + 1), padding + 34, currentY + 52);
+
+            // Text
+            ctx.fillStyle = '#1F2937';
+            ctx.font = '22px sans-serif';
+            ctx.textAlign = 'left';
+            const lines = this.wrapText(ctx, highlight, width - padding * 2 - 70, 22);
+            lines.forEach((line, i) => {
+              ctx.fillText(line, padding + 70, currentY + 40 + i * 28);
+            });
+
+            currentY += cardHeight + 16;
+          });
+
+          // Footer
+          const footerY = height - 100;
+          ctx.fillStyle = '#94A3B8';
+          ctx.font = '20px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('TikTok B2B · 工厂出口信息平台', width / 2, footerY);
+          ctx.font = '18px sans-serif';
+          ctx.fillText(`生成时间：${new Date().toLocaleString('zh-CN')}`, width / 2, footerY + 30);
+        },
+
+        drawReportMinimalStyle(ctx, width, height) {
+          const padding = 70;
+          let currentY = padding;
+
+          // Background
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, width, height);
+
+          // Decorative element
+          ctx.fillStyle = '#8B5CF6';
+          ctx.fillRect(padding, currentY, 6, 60);
+          currentY += 100;
+
+          // Large title
+          ctx.fillStyle = '#0F172A';
+          ctx.font = 'bold 64px sans-serif';
+          ctx.textAlign = 'left';
+          ctx.fillText('周报', padding + 20, currentY);
+          currentY += 80;
+
+          ctx.fillStyle = '#64748B';
+          ctx.font = '24px sans-serif';
+          ctx.fillText(this.reportData.week, padding + 20, currentY);
+          currentY += 60;
+
+          // Line
+          ctx.strokeStyle = '#E5E7EB';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(padding, currentY);
+          ctx.lineTo(width - padding, currentY);
+          ctx.stroke();
+          currentY += 50;
+
+          // Highlights
+          this.reportData.highlights.forEach((highlight, index) => {
+            ctx.fillStyle = '#0F172A';
+            ctx.font = 'bold 28px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(`0${index + 1}`, padding, currentY);
+
+            const lines = this.wrapText(ctx, highlight, width - padding * 2 - 50, 24);
+            lines.forEach((line, i) => {
+              ctx.fillStyle = '#475569';
+              ctx.font = '24px sans-serif';
+              ctx.fillText(line, padding + 50, currentY + i * 32);
+            });
+
+            currentY += lines.length * 32 + 40;
+          });
+
+          // Footer
+          ctx.fillStyle = '#CBD5E1';
+          ctx.font = '16px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('TikTok Hot Info', width / 2, height - 60);
+        },
+
+        drawReportGradientStyle(ctx, width, height) {
+          const padding = 50;
+          let currentY = padding;
+
+          // Gradient background - purple
+          const bgGradient = ctx.createLinearGradient(0, 0, width, height);
+          bgGradient.addColorStop(0, '#8B5CF6');
+          bgGradient.addColorStop(0.5, '#7C3AED');
+          bgGradient.addColorStop(1, '#6D28D9');
+          ctx.fillStyle = bgGradient;
+          ctx.fillRect(0, 0, width, height);
+
+          // Decorative circles
+          this.drawCircle(ctx, width - 100, 150, 80, 'rgba(255,255,255,0.1)');
+          this.drawCircle(ctx, 100, height - 200, 120, 'rgba(255,255,255,0.05)');
+
+          // Title
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = 'bold 56px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('📊 每周报告', width / 2, currentY);
+          currentY += 70;
+
+          ctx.fillStyle = 'rgba(255,255,255,0.9)';
+          ctx.font = '24px sans-serif';
+          ctx.fillText(this.reportData.week, width / 2, currentY);
+          currentY += 80;
+
+          // Highlights card
+          const cardHeight = this.reportData.highlights.length * 90 + 60;
+          this.drawRoundedRect(ctx, padding, currentY, width - padding * 2, cardHeight, 20);
+          ctx.fillStyle = 'rgba(255,255,255,0.15)';
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          let itemY = currentY + 40;
+          this.reportData.highlights.forEach((highlight, index) => {
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 20px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(`0${index + 1}`, padding + 30, itemY);
+
+            const lines = this.wrapText(ctx, highlight, width - padding * 2 - 60, 20);
+            lines.forEach((line, i) => {
+              ctx.fillText(line, padding + 70, itemY + i * 26);
+            });
+
+            itemY += 90;
+          });
+
+          // Footer
+          ctx.fillStyle = 'rgba(255,255,255,0.8)';
+          ctx.font = '20px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(`TikTok B2B · ${this.formatDate()}`, width / 2, height - 60);
+        },
+
+        drawReportCardStyle(ctx, width, height) {
+          const padding = 50;
+          let currentY = padding;
+
+          // Background
+          ctx.fillStyle = '#F8FAFC';
+          ctx.fillRect(0, 0, width, height);
+
+          // Header
+          ctx.fillStyle = '#0F172A';
+          ctx.font = 'bold 44px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('📊 市场周报', width / 2, currentY);
+          currentY += 60;
+
+          ctx.fillStyle = '#64748B';
+          ctx.font = '22px sans-serif';
+          ctx.fillText(this.reportData.week, width / 2, currentY);
+          currentY += 60;
+
+          // Highlights as cards
+          this.reportData.highlights.forEach((highlight, index) => {
+            const cardHeight = 120;
+            this.drawRoundedRect(ctx, padding, currentY, width - padding * 2, cardHeight, 16);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fill();
+            ctx.strokeStyle = '#E5E7EB';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Left color bar
+            this.drawRoundedRect(ctx, padding, currentY, 8, cardHeight, 0);
+            ctx.fillStyle = '#8B5CF6';
+            ctx.fill();
+
+            // Number
+            ctx.fillStyle = '#8B5CF6';
+            ctx.font = 'bold 48px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(`0${index + 1}`, padding + 30, currentY + 45);
+
+            // Text
+            const lines = this.wrapText(ctx, highlight, width - padding * 2 - 90, 22);
+            lines.forEach((line, i) => {
+              ctx.fillStyle = '#374151';
+              ctx.font = '22px sans-serif';
+              ctx.fillText(line, padding + 90, currentY + 50 + i * 28);
+            });
+
+            currentY += cardHeight + 16;
+          });
+
+          // Footer
+          ctx.fillStyle = '#64748B';
+          ctx.font = '18px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('TikTok B2B · 工厂出口信息平台', width / 2, height - 60);
+        },
+
+        drawReportModernStyle(ctx, width, height) {
+          const padding = 50;
+          let currentY = padding;
+
+          // Modern gradient
+          const bgGradient = ctx.createLinearGradient(0, 0, 0, height);
+          bgGradient.addColorStop(0, '#FAF5FF');
+          bgGradient.addColorStop(1, '#F3E8FF');
+          ctx.fillStyle = bgGradient;
+          ctx.fillRect(0, 0, width, height);
+
+          // Decorative shape
+          ctx.fillStyle = 'rgba(139, 92, 246, 0.1)';
+          ctx.beginPath();
+          ctx.moveTo(width - 200, 0);
+          ctx.lineTo(width, 0);
+          ctx.lineTo(width, 300);
+          ctx.closePath();
+          ctx.fill();
+
+          // Title
+          ctx.fillStyle = '#0F172A';
+          ctx.font = 'bold 52px sans-serif';
+          ctx.textAlign = 'left';
+          ctx.fillText('Weekly', padding, currentY);
+          currentY += 55;
+
+          ctx.fillStyle = '#8B5CF6';
+          ctx.font = 'bold 52px sans-serif';
+          ctx.fillText('Report', padding, currentY);
+          currentY += 60;
+
+          ctx.fillStyle = '#64748B';
+          ctx.font = '22px sans-serif';
+          ctx.fillText(this.reportData.week, padding, currentY);
+          currentY += 70;
+
+          // Highlights with modern styling
+          this.reportData.highlights.forEach((highlight, index) => {
+            const cardHeight = 100;
+
+            // Card shadow effect
+            this.drawRoundedRect(ctx, padding + 4, currentY + 4, width - padding * 2, cardHeight, 12);
+            ctx.fillStyle = 'rgba(139, 92, 246, 0.1)';
+            ctx.fill();
+
+            this.drawRoundedRect(ctx, padding, currentY, width - padding * 2, cardHeight, 12);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fill();
+            ctx.strokeStyle = '#E9D5FF';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Number
+            ctx.fillStyle = '#8B5CF6';
+            ctx.font = 'bold 32px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(`0${index + 1}`, padding + 20, currentY + 35);
+
+            // Text
+            const lines = this.wrapText(ctx, highlight, width - padding * 2 - 70, 20);
+            lines.forEach((line, i) => {
+              ctx.fillStyle = '#374151';
+              ctx.font = '20px sans-serif';
+              ctx.fillText(line, padding + 65, currentY + 38 + i * 26);
+            });
+
+            currentY += cardHeight + 16;
+          });
+
+          // Footer
+          ctx.fillStyle = '#64748B';
+          ctx.font = '16px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('TikTok Hot Info · ' + this.formatDate(), width / 2, height - 60);
+        },
+
+        downloadReportPoster() {
+          const canvas = this.$refs.reportPosterCanvas;
+          if (!canvas) return;
+
+          const link = document.createElement('a');
+          link.download = `weekly-report-${Date.now()}.png`;
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+
+          this.showToast = true;
+          setTimeout(() => {
+            this.showToast = false;
+          }, 3000);
+        },
+
+        closeReportPoster() {
+          this.showReportPosterModal = false;
+          this.loadingReportPoster = false;
+        },
+
+        formatNumber(num) {
+          if (!num) return '0';
+          if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+          if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+          return num.toString();
+        },
+
+        calculateExportScore(item) {
+          let score = 0;
+          if (item.stats.views > 50000) score += 20;
+          if (item.stats.inquiryCount > 100) score += 30;
+          if (item.export.targetCountries.length > 3) score += 20;
+          if (item.factory.certifications.length > 0) score += 15;
+          if (item.hotProduct) score += 15;
+          return score;
+        },
+
+        // Poster Methods
+        async generatePoster(factory) {
+          this.currentFactory = factory;
+          this.showPosterModal = true;
+          this.selectedTemplate = 'business';
+          this.loadingPoster = true;
+
+          // Load cover image
+          if (factory.video?.coverImage) {
+            await this.loadCoverImage(factory.video.coverImage);
+          }
+
+          // Simulate loading for better UX
+          setTimeout(() => {
+            this.loadingPoster = false;
+            this.$nextTick(() => {
+              this.drawPoster();
+            });
+          }, 600);
+        },
+
+        async loadCoverImage(url) {
+          return new Promise((resolve) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = () => {
+              this.coverImage = img;
+              resolve(img);
+            };
+            img.onerror = () => {
+              console.warn('封面图加载失败');
+              resolve(null);
+            };
+            img.src = url.startsWith('http') ? url : `https:${url}`;
+          });
+        },
+
+        selectTemplate(templateId) {
+          this.selectedTemplate = templateId;
+          this.$nextTick(() => {
+            this.drawPoster();
+          });
+        },
+
+        regeneratePoster() {
+          this.drawPoster();
+        },
+
+        drawPoster() {
+          const canvas = this.$refs.posterCanvas;
+          if (!canvas) return;
+
+          const ctx = canvas.getContext('2d');
+          const factory = this.currentFactory;
+          const width = 750;
+          const height = 1334;
+
+          // Clear canvas
+          ctx.clearRect(0, 0, width, height);
+
+          // Draw based on template
+          switch (this.selectedTemplate) {
+            case 'business':
+              this.drawBusinessStyle(ctx, factory, width, height);
+              break;
+            case 'minimal':
+              this.drawMinimalStyle(ctx, factory, width, height);
+              break;
+            case 'gradient':
+              this.drawGradientStyle(ctx, factory, width, height);
+              break;
+            case 'factory':
+              this.drawFactoryStyle(ctx, factory, width, height);
+              break;
+            case 'product':
+              this.drawProductStyle(ctx, factory, width, height);
+              break;
+            default:
+              this.drawBusinessStyle(ctx, factory, width, height);
+          }
+        },
+
+        drawBusinessStyle(ctx, factory, width, height) {
+          const padding = 50;
+          let currentY = padding;
+
+          // Background
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, width, height);
+
+          // Header gradient
+          const headerGradient = ctx.createLinearGradient(0, 0, width, 0);
+          headerGradient.addColorStop(0, '#0369A1');
+          headerGradient.addColorStop(1, '#0EA5E9');
+          ctx.fillStyle = headerGradient;
+          ctx.fillRect(0, 0, width, 16);
+
+          // Logo
+          ctx.fillStyle = '#0F172A';
+          ctx.font = 'bold 32px sans-serif';
+          ctx.textAlign = 'left';
+          ctx.fillText('TB 热点资讯', padding, currentY + 12);
+
+          // Date
+          ctx.fillStyle = '#64748B';
+          ctx.font = '22px sans-serif';
+          ctx.textAlign = 'right';
+          ctx.fillText(this.formatDate(), width - padding, currentY + 12);
+          currentY += 60;
+
+          // Region badge
+          const regionBadgeWidth = 160;
+          const regionBadgeX = (width - regionBadgeWidth) / 2;
+          this.drawRoundedRect(ctx, regionBadgeX, currentY, regionBadgeWidth, 48, 24);
+          ctx.fillStyle = '#F1F5F9';
+          ctx.fill();
+          ctx.fillStyle = '#0369A1';
+          ctx.font = 'bold 26px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(factory.region || '北美', width / 2, currentY + 32);
+          currentY += 80;
+
+          // Cover image
+          if (this.coverImage) {
+            const imgWidth = width - padding * 2;
+            const imgHeight = 360;
+            this.drawRoundedRect(ctx, padding, currentY, imgWidth, imgHeight, 12);
+            ctx.save();
+            ctx.clip();
+            ctx.drawImage(this.coverImage, padding, currentY, imgWidth, imgHeight);
+            ctx.restore();
+            ctx.strokeStyle = '#E2E8F0';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            currentY += imgHeight + 40;
+          }
+
+          // Title
+          ctx.fillStyle = '#020617';
+          ctx.font = 'bold 40px sans-serif';
+          ctx.textAlign = 'left';
+          const titleLines = this.wrapText(ctx, factory.title || factory.description || '暂无标题', width - padding * 2, 40);
+          titleLines.forEach((line) => {
+            ctx.fillText(line, padding, currentY);
+            currentY += 50;
+          });
+          currentY += 30;
+
+          // Stats cards
+          const stats = [
+            { label: '播放量', value: this.formatNumber(factory.stats?.views || 0), icon: '👁️' },
+            { label: '点赞数', value: this.formatNumber(factory.stats?.likes || 0), icon: '❤️' },
+            { label: '评论数', value: this.formatNumber(factory.stats?.comments || 0), icon: '💬' },
+            { label: '询盘数', value: factory.stats?.inquiryCount || 0, icon: '📧' }
+          ];
+
+          const cardPadding = 30;
+          const cardY = currentY;
+          const rowHeight = 100;
+          const colWidth = (width - padding * 2 - cardPadding * 3) / 2;
+
+          stats.forEach((stat, index) => {
+            const row = Math.floor(index / 2);
+            const col = index % 2;
+            const x = padding + cardPadding / 2 + col * (colWidth + cardPadding);
+            const y = cardY + row * (rowHeight + cardPadding);
+
+            this.drawRoundedRect(ctx, x, y, colWidth, rowHeight, 12);
+            ctx.fillStyle = '#F8FAFC';
+            ctx.fill();
+            ctx.strokeStyle = '#E2E8F0';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            ctx.font = '32px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(stat.icon, x + 20, y + 35);
+
+            ctx.fillStyle = '#0F172A';
+            ctx.font = 'bold 36px sans-serif';
+            ctx.fillText(stat.value, x + 70, y + 35);
+
+            ctx.fillStyle = '#64748B';
+            ctx.font = '22px sans-serif';
+            ctx.fillText(stat.label, x + 20, y + 75);
+          });
+
+          currentY = cardY + rowHeight * 2 + cardPadding + 50;
+
+          // Factory info
+          if (factory.factory?.name) {
+            const factoryY = currentY;
+            const factoryHeight = 100;
+
+            this.drawRoundedRect(ctx, padding, factoryY, width - padding * 2, factoryHeight, 12);
+            ctx.fillStyle = '#EFF6FF';
+            ctx.fill();
+
+            ctx.fillStyle = '#0369A1';
+            ctx.font = 'bold 28px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(`🏭 ${factory.factory.name}`, padding + 20, factoryY + 35);
+
+            ctx.fillStyle = '#475569';
+            ctx.font = '24px sans-serif';
+            ctx.fillText(`规模：${factory.factory.scale || '未知'}`, padding + 20, factoryY + 70);
+
+            currentY = factoryY + factoryHeight + 40;
+          }
+
+          // Footer
+          const footerY = height - 100;
+          ctx.fillStyle = '#94A3B8';
+          ctx.font = '20px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('数据来源：TikTok Creative Center', width / 2, footerY);
+          ctx.font = '18px sans-serif';
+          ctx.fillText(`生成时间：${new Date().toLocaleString('zh-CN')}`, width / 2, footerY + 30);
+        },
+
+        drawMinimalStyle(ctx, factory, width, height) {
+          const padding = 70;
+          let currentY = padding;
+
+          // Background
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, width, height);
+
+          // Large title
+          ctx.fillStyle = '#0F172A';
+          ctx.font = 'bold 72px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('热点', width / 2, currentY);
+          currentY += 90;
+
+          // Region
+          ctx.fillStyle = '#64748B';
+          ctx.font = '26px sans-serif';
+          ctx.fillText(factory.region || '北美', width / 2, currentY);
+          currentY += 80;
+
+          // Title
+          ctx.fillStyle = '#020617';
+          ctx.font = 'bold 42px sans-serif';
+          const titleLines = this.wrapText(ctx, factory.title || factory.description || '暂无标题', width - padding * 2, 42);
+          titleLines.forEach((line) => {
+            ctx.fillText(line, width / 2, currentY);
+            currentY += 55;
+          });
+          currentY += 60;
+
+          // Main stat
+          const mainValue = this.formatNumber(factory.stats?.views || 0);
+          ctx.fillStyle = '#0369A1';
+          ctx.font = 'bold 120px sans-serif';
+          ctx.fillText(mainValue, width / 2, currentY + 60);
+          currentY += 160;
+
+          ctx.fillStyle = '#94A3B8';
+          ctx.font = '28px sans-serif';
+          ctx.fillText('播放量', width / 2, currentY);
+          currentY += 80;
+
+          // Other stats
+          const secondaryStats = `${this.formatNumber(factory.stats?.likes || 0)} 点赞  ·  ${factory.stats?.inquiryCount || 0} 询盘`;
+          ctx.fillStyle = '#64748B';
+          ctx.font = '24px sans-serif';
+          ctx.fillText(secondaryStats, width / 2, currentY);
+
+          // Footer
+          ctx.fillStyle = '#CBD5E1';
+          ctx.font = '18px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('TikTok Hot Info', width / 2, height - 60);
+        },
+
+        drawGradientStyle(ctx, factory, width, height) {
+          const padding = 50;
+          let currentY = padding;
+
+          // Gradient background
+          const bgGradient = ctx.createLinearGradient(0, 0, 0, height);
+          bgGradient.addColorStop(0, '#0369A1');
+          bgGradient.addColorStop(0.5, '#0C4A6E');
+          bgGradient.addColorStop(1, '#0F172A');
+          ctx.fillStyle = bgGradient;
+          ctx.fillRect(0, 0, width, height);
+
+          // Decorative circles
+          this.drawCircle(ctx, width - 100, 150, 80, 'rgba(255,255,255,0.1)');
+          this.drawCircle(ctx, 100, height - 200, 120, 'rgba(255,255,255,0.05)');
+
+          // Title
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = 'bold 56px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('🔥 热门资讯', width / 2, currentY);
+          currentY += 80;
+
+          // Cover image
+          if (this.coverImage) {
+            const imgWidth = width - padding * 2;
+            const imgHeight = 340;
+            this.drawRoundedRect(ctx, padding, currentY, imgWidth, imgHeight, 16);
+            ctx.save();
+            ctx.clip();
+            ctx.drawImage(this.coverImage, padding, currentY, imgWidth, imgHeight);
+            ctx.restore();
+            currentY += imgHeight + 40;
+          }
+
+          // Title card
+          const cardHeight = 150;
+          this.drawRoundedRect(ctx, padding, currentY, width - padding * 2, cardHeight, 16);
+          ctx.fillStyle = 'rgba(255,255,255,0.15)';
+          ctx.fill();
+
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = 'bold 36px sans-serif';
+          ctx.textAlign = 'left';
+          const titleLines = this.wrapText(ctx, factory.title || factory.description || '', width - padding * 3, 36);
+          titleLines.forEach((line, index) => {
+            ctx.fillText(line, padding + 24, currentY + 50 + index * 40);
+          });
+
+          ctx.font = '26px sans-serif';
+          ctx.fillText(`${this.formatNumber(factory.stats?.views || 0)} 播放  ·  ${this.formatNumber(factory.stats?.likes || 0)} 点赞`, padding + 24, currentY + cardHeight - 30);
+
+          currentY += cardHeight + 50;
+
+          // Factory name
+          if (factory.factory?.name) {
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = 'bold 48px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(factory.factory.name, width / 2, currentY);
+            currentY += 60;
+
+            ctx.font = '24px sans-serif';
+            ctx.fillText(`规模：${factory.factory.scale || '未知'}`, width / 2, currentY);
+          }
+
+          // Footer
+          ctx.fillStyle = 'rgba(255,255,255,0.6)';
+          ctx.font = '20px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(`TikTok Hot Info · ${factory.region || '北美'} · ${this.formatDate()}`, width / 2, height - 60);
+        },
+
+        drawFactoryStyle(ctx, factory, width, height) {
+          const padding = 50;
+          let currentY = padding;
+
+          // Light blue background
+          ctx.fillStyle = '#F0F9FF';
+          ctx.fillRect(0, 0, width, height);
+
+          // Dark blue header
+          ctx.fillStyle = '#0369A1';
+          ctx.fillRect(0, 0, width, 180);
+
+          // Title
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = 'bold 44px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('🏭 工厂推荐', width / 2, currentY + 20);
+          currentY += 60;
+
+          ctx.fillStyle = 'rgba(255,255,255,0.9)';
+          ctx.font = '24px sans-serif';
+          ctx.fillText(`${factory.region || '北美'} · ${this.formatDate()}`, width / 2, currentY + 20);
+          currentY = 220;
+
+          // Factory card
+          const cardHeight = 320;
+          this.drawRoundedRect(ctx, padding, currentY, width - padding * 2, cardHeight, 16);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fill();
+          ctx.strokeStyle = '#BAE6FD';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          if (factory.factory?.name) {
+            ctx.fillStyle = '#0F172A';
+            ctx.font = 'bold 36px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(factory.factory.name, width / 2, currentY + 40);
+
+            ctx.fillStyle = '#64748B';
+            ctx.font = '24px sans-serif';
+            ctx.fillText(`规模：${factory.factory.scale || '未知'}`, width / 2, currentY + 80);
+          }
+
+          const factoryData = [
+            { label: '订单量', value: factory.stats?.inquiryCount || '---' },
+            { label: '响应', value: '<24h' },
+            { label: '认证', value: factory.factory?.certifications?.length || 0 }
+          ];
+
+          const dataY = currentY + 120;
+          const colWidth = (width - padding * 2) / 3;
+          factoryData.forEach((data, index) => {
+            const x = padding + index * colWidth;
+            ctx.fillStyle = '#0369A1';
+            ctx.font = 'bold 40px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(String(data.value), x + colWidth / 2, dataY + 30);
+
+            ctx.fillStyle = '#64748B';
+            ctx.font = '22px sans-serif';
+            ctx.fillText(data.label, x + colWidth / 2, dataY + 60);
+          });
+
+          currentY += cardHeight + 40;
+
+          // Product card
+          if (factory.hotProduct) {
+            const productHeight = 140;
+            this.drawRoundedRect(ctx, padding, currentY, width - padding * 2, productHeight, 12);
+            ctx.fillStyle = '#FEF3C7';
+            ctx.fill();
+
+            ctx.fillStyle = '#D97706';
+            ctx.font = 'bold 28px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(`🔥 爆款：${factory.hotProduct.name}`, padding + 20, currentY + 40);
+
+            ctx.fillStyle = '#92400E';
+            ctx.font = 'bold 40px sans-serif';
+            ctx.textAlign = 'right';
+            ctx.fillText(factory.hotProduct.price, width - padding - 20, currentY + 40);
+
+            currentY += productHeight + 40;
+          }
+
+          // Stats card
+          const videoHeight = 140;
+          this.drawRoundedRect(ctx, padding, currentY, width - padding * 2, videoHeight, 12);
+          ctx.fillStyle = '#F0FDF4';
+          ctx.fill();
+
+          ctx.fillStyle = '#059669';
+          ctx.font = 'bold 26px sans-serif';
+          ctx.textAlign = 'left';
+          ctx.fillText('📹 视频数据', padding + 20, currentY + 35);
+
+          const videoStats = `${this.formatNumber(factory.stats?.views || 0)} 播放  ·  ${this.formatNumber(factory.stats?.likes || 0)} 点赞`;
+          ctx.fillStyle = '#065F46';
+          ctx.font = '22px sans-serif';
+          ctx.fillText(videoStats, padding + 20, currentY + 90);
+
+          // Footer
+          ctx.fillStyle = '#64748B';
+          ctx.font = '20px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('TikTok B2B · 工厂出口信息平台', width / 2, height - 60);
+        },
+
+        drawProductStyle(ctx, factory, width, height) {
+          const padding = 50;
+          let currentY = padding;
+
+          // Orange gradient background
+          const bgGradient = ctx.createLinearGradient(0, 0, width, height);
+          bgGradient.addColorStop(0, '#FB923C');
+          bgGradient.addColorStop(1, '#EA580C');
+          ctx.fillStyle = bgGradient;
+          ctx.fillRect(0, 0, width, height);
+
+          // Title
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = 'bold 52px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('📦 爆款产品', width / 2, currentY);
+          currentY += 70;
+
+          const badgeWidth = 200;
+          const badgeX = (width - badgeWidth) / 2;
+          this.drawRoundedRect(ctx, badgeX, currentY - 25, badgeWidth, 50, 25);
+          ctx.fillStyle = 'rgba(255,255,255,0.25)';
+          ctx.fill();
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = '24px sans-serif';
+          ctx.fillText(factory.region || '北美', width / 2, currentY + 8);
+          currentY += 80;
+
+          // Product card
+          if (factory.hotProduct || factory.title) {
+            const productHeight = 380;
+            this.drawRoundedRect(ctx, padding, currentY, width - padding * 2, productHeight, 16);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fill();
+
+            const productName = factory.hotProduct?.name || factory.title || '未知产品';
+            ctx.fillStyle = '#0F172A';
+            ctx.font = 'bold 42px sans-serif';
+            ctx.textAlign = 'center';
+            const productLines = this.wrapText(ctx, productName, width - padding * 3, 42);
+            productLines.forEach((line, index) => {
+              ctx.fillText(line, width / 2, currentY + 50 + index * 50);
+            });
+
+            if (factory.hotProduct?.price) {
+              ctx.fillStyle = '#EA580C';
+              ctx.font = 'bold 72px sans-serif';
+              ctx.fillText(factory.hotProduct.price, width / 2, currentY + 200);
+            }
+
+            ctx.fillStyle = '#64748B';
+            ctx.font = '26px sans-serif';
+            ctx.fillText(`🏪 ${factory.hotProduct?.shop || factory.factory?.name || '未知'}`, width / 2, currentY + 260);
+
+            ctx.fillStyle = '#0369A1';
+            ctx.font = 'bold 32px sans-serif';
+            ctx.fillText(`${this.formatNumber(factory.stats?.views || 0)} 播放`, width / 2, currentY + 320);
+
+            currentY += productHeight + 40;
+          }
+
+          // Factory info
+          if (factory.factory) {
+            const factoryHeight = 120;
+            this.drawRoundedRect(ctx, padding, currentY, width - padding * 2, factoryHeight, 12);
+            ctx.fillStyle = 'rgba(255,255,255,0.95)';
+            ctx.fill();
+
+            ctx.fillStyle = '#0F172A';
+            ctx.font = 'bold 30px sans-serif';
+            ctx.textAlign = 'left';
+            ctx.fillText(`🏭 工厂：${factory.factory.name}`, padding + 20, currentY + 40);
+
+            ctx.fillStyle = '#64748B';
+            ctx.font = '24px sans-serif';
+            ctx.fillText(`规模：${factory.factory.scale || '未知'}`, padding + 20, currentY + 85);
+
+            currentY += factoryHeight + 40;
+          }
+
+          // Stats
+          const statsHeight = 140;
+          this.drawRoundedRect(ctx, padding, currentY, width - padding * 2, statsHeight, 12);
+          ctx.fillStyle = 'rgba(255,255,255,0.9)';
+          ctx.fill();
+
+          const stats = [
+            { label: '播放', value: this.formatNumber(factory.stats?.views || 0) },
+            { label: '点赞', value: this.formatNumber(factory.stats?.likes || 0) },
+            { label: '询盘', value: factory.stats?.inquiryCount || 0 }
+          ];
+
+          const statWidth = (width - padding * 2) / 3;
+          stats.forEach((stat, index) => {
+            const x = padding + index * statWidth;
+            ctx.fillStyle = '#EA580C';
+            ctx.font = 'bold 40px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText(String(stat.value), x + statWidth / 2, currentY + 50);
+
+            ctx.fillStyle = '#64748B';
+            ctx.font = '22px sans-serif';
+            ctx.fillText(stat.label, x + statWidth / 2, currentY + 90);
+          });
+
+          // Footer
+          ctx.fillStyle = 'rgba(255,255,255,0.8)';
+          ctx.font = '20px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('TikTok Hot Info · ' + this.formatDate(), width / 2, height - 60);
+        },
+
+        // Helper methods
+        drawRoundedRect(ctx, x, y, width, height, radius) {
+          ctx.beginPath();
+          ctx.moveTo(x + radius, y);
+          ctx.lineTo(x + width - radius, y);
+          ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+          ctx.lineTo(x + width, y + height - radius);
+          ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+          ctx.lineTo(x + radius, y + height);
+          ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+          ctx.lineTo(x, y + radius);
+          ctx.quadraticCurveTo(x, y, x + radius, y);
+          ctx.closePath();
+        },
+
+        drawCircle(ctx, x, y, radius, color) {
+          ctx.beginPath();
+          ctx.arc(x, y, radius, 0, Math.PI * 2);
+          ctx.fillStyle = color;
+          ctx.fill();
+        },
+
+        wrapText(ctx, text, maxWidth, fontSize) {
+          ctx.font = `${fontSize}px sans-serif`;
+          const words = text.split('');
+          const lines = [];
+          let currentLine = '';
+
+          for (const char of words) {
+            const testLine = currentLine + char;
+            const metrics = ctx.measureText(testLine);
+            if (metrics.width > maxWidth && currentLine !== '') {
+              lines.push(currentLine);
+              currentLine = char;
+            } else {
+              currentLine = testLine;
+            }
+          }
+          lines.push(currentLine);
+
+          if (lines.length > 3) {
+            const lastLine = lines[2].substring(0, lines[2].length - 1) + '...';
+            lines[2] = lastLine;
+            return lines.slice(0, 3);
+          }
+
+          return lines;
+        },
+
+        formatDate() {
+          const now = new Date();
+          const year = now.getFullYear();
+          const month = String(now.getMonth() + 1).padStart(2, '0');
+          const day = String(now.getDate()).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+        },
+
+        downloadPoster() {
+          const canvas = this.$refs.posterCanvas;
+          if (!canvas) return;
+
+          // Create download link
+          const link = document.createElement('a');
+          link.download = `tiktok-hot-${this.currentFactory?.id || 'poster'}-${Date.now()}.png`;
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+
+          // Show success toast
+          this.showToast = true;
+          setTimeout(() => {
+            this.showToast = false;
+          }, 3000);
+        },
+
+        closePoster() {
+          this.showPosterModal = false;
+          this.currentFactory = null;
+          this.coverImage = null;
+          this.loadingPoster = false;
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

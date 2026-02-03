@@ -6,22 +6,24 @@
   <title>TikTok B2B 工厂出口信息平台</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* Professional B2B Color Palette */
-      --primary: #2563eb;
-      --primary-dark: #1e40af;
-      --primary-light: #3b82f6;
-      --success: #10b981;
-      --warning: #f59e0b;
+      /* Design System Colors - Trust & Authority */
+      --primary: #0F172A;
+      --primary-dark: #020617;
+      --secondary: #334155;
+      --cta: #0369A1;
+      --cta-hover: #0284c7;
+      --success: #52c41a;
+      --warning: #fa8c16;
       --danger: #ef4444;
 
       /* Neutral Colors - Light Mode */
       --bg-primary: #ffffff;
-      --bg-secondary: #f8fafc;
+      --bg-secondary: #F8FAFC;
       --bg-tertiary: #f1f5f9;
-      --text-primary: #0f172a;
+      --text-primary: #020617;
       --text-secondary: #475569;
       --text-tertiary: #94a3b8;
       --border: #e2e8f0;
@@ -42,10 +44,10 @@
       --radius-xl: 16px;
 
       /* Shadows */
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
-      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
-      --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+      --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.1), 0 2px 4px -2px rgba(15, 23, 42, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.1);
+      --shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
 
       /* Transitions */
       --transition-fast: 150ms ease;
@@ -60,7 +62,7 @@
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg-secondary);
       color: var(--text-primary);
       line-height: 1.6;
@@ -92,12 +94,17 @@
       gap: var(--space-md);
       text-decoration: none;
       color: var(--text-primary);
+      transition: opacity var(--transition-base);
+    }
+
+    .logo:hover {
+      opacity: 0.8;
     }
 
     .logo-icon {
       width: 40px;
       height: 40px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      background: linear-gradient(135deg, var(--cta), var(--cta-hover));
       border-radius: var(--radius-md);
       display: flex;
       align-items: center;
@@ -127,7 +134,7 @@
 
     /* Hero Section */
     .hero {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      background: linear-gradient(135deg, var(--cta) 0%, var(--primary) 100%);
       border-radius: var(--radius-xl);
       padding: var(--space-2xl) var(--space-xl);
       color: white;
@@ -198,6 +205,15 @@
       font-size: 20px;
       font-weight: 700;
       color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .section-icon {
+      width: 24px;
+      height: 24px;
+      color: var(--cta);
     }
 
     /* Search Bar */
@@ -214,32 +230,50 @@
       border-radius: var(--radius-md);
       font-size: 15px;
       font-family: inherit;
-      transition: border-color var(--transition-base);
+      transition: all var(--transition-base);
+      color: var(--text-primary);
+      background: var(--bg-secondary);
     }
 
     .search-input:focus {
       outline: none;
-      border-color: var(--primary);
+      border-color: var(--cta);
+      background: var(--bg-primary);
+      box-shadow: 0 0 0 4px rgba(3, 105, 161, 0.1);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-tertiary);
     }
 
     .btn {
       padding: 12px var(--space-lg);
-      background: var(--primary);
+      background: var(--cta);
       color: white;
       border: none;
       border-radius: var(--radius-md);
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      transition: background var(--transition-base);
+      transition: all var(--transition-base);
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
     }
 
     .btn:hover {
-      background: var(--primary-dark);
+      background: var(--cta-hover);
     }
 
     .btn:active {
       transform: scale(0.98);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--cta);
+      outline-offset: 2px;
     }
 
     /* Industry Grid */
@@ -257,6 +291,12 @@
       text-align: center;
       cursor: pointer;
       transition: all var(--transition-base);
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
     }
 
     .industry-card:hover {
@@ -264,14 +304,21 @@
       box-shadow: var(--shadow-md);
     }
 
+    .industry-card:focus-visible {
+      outline: 2px solid var(--cta);
+      outline-offset: 2px;
+    }
+
     .industry-card.active {
-      background: var(--primary);
+      background: var(--cta);
       color: white;
-      border-color: var(--primary);
+      border-color: var(--cta);
+      box-shadow: 0 4px 12px rgba(3, 105, 161, 0.25);
     }
 
     .industry-icon {
-      font-size: 36px;
+      width: 40px;
+      height: 40px;
       margin-bottom: var(--space-sm);
     }
 
@@ -292,6 +339,12 @@
       border-radius: var(--radius-lg);
       padding: var(--space-lg);
       border: 1px solid var(--border);
+      transition: all var(--transition-base);
+    }
+
+    .overview-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
     }
 
     .overview-header {
@@ -331,7 +384,7 @@
     .stat-box .value {
       font-size: 20px;
       font-weight: 700;
-      color: var(--primary);
+      color: var(--cta);
     }
 
     .recommendation {
@@ -343,21 +396,21 @@
     }
 
     .recommendation.high {
-      background: #f0fdf4;
-      color: var(--success);
-      border: 1px solid #bbf7d0;
+      background: #dcfce7;
+      color: #16a34a;
+      border: 1px solid #86efac;
     }
 
     .recommendation.medium {
-      background: #eff6ff;
-      color: var(--primary);
-      border: 1px solid #bfdbfe;
+      background: #dbeafe;
+      color: var(--cta);
+      border: 1px solid #93c5fd;
     }
 
     .recommendation.low {
-      background: #fffbeb;
-      color: var(--warning);
-      border: 1px solid #fde68a;
+      background: #fef3c7;
+      color: #d97706;
+      border: 1px solid #fcd34d;
     }
 
     /* Factory Grid */
@@ -373,11 +426,17 @@
       overflow: hidden;
       border: 1px solid var(--border);
       transition: all var(--transition-base);
+      cursor: pointer;
     }
 
     .factory-card:hover {
       transform: translateY(-4px);
       box-shadow: var(--shadow-lg);
+    }
+
+    .factory-card:focus-visible {
+      outline: 2px solid var(--cta);
+      outline-offset: 2px;
     }
 
     .factory-image {
@@ -430,6 +489,7 @@
       background: #eff6ff;
       border-radius: var(--radius-md);
       min-width: 80px;
+      border: 1px solid #dbeafe;
     }
 
     .score-label {
@@ -441,7 +501,7 @@
     .score-value {
       font-size: 24px;
       font-weight: 700;
-      color: var(--primary);
+      color: var(--cta);
     }
 
     .factory-export {
@@ -483,14 +543,16 @@
       display: flex;
       align-items: center;
       padding: var(--space-sm);
-      background: linear-gradient(135deg, #fffbeb, #fef3c7);
+      background: linear-gradient(135deg, #fef3c7, #fef9c3);
       border-radius: var(--radius-sm);
       font-size: 13px;
+      border: 1px solid #fde68a;
     }
 
     .hot-product .label {
-      color: var(--warning);
+      color: #d97706;
       margin-right: var(--space-sm);
+      font-weight: 500;
     }
 
     .hot-product .price {
@@ -553,7 +615,7 @@
       bottom: var(--space-lg);
       width: 64px;
       height: 64px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      background: linear-gradient(135deg, var(--cta), var(--cta-hover));
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -568,7 +630,16 @@
     }
 
     .report-btn:hover {
-      transform: scale(1.1);
+      transform: scale(1.05);
+    }
+
+    .report-btn:active {
+      transform: scale(0.95);
+    }
+
+    .report-btn:focus-visible {
+      outline: 2px solid var(--cta);
+      outline-offset: 2px;
     }
 
     /* Modal */
@@ -579,7 +650,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0,0,0,0.5);
+      background: rgba(15, 23, 42, 0.5);
       align-items: center;
       justify-content: center;
       z-index: 100;
@@ -625,10 +696,18 @@
       cursor: pointer;
       color: var(--text-secondary);
       transition: all var(--transition-base);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .modal-close:hover {
       background: var(--bg-tertiary);
+    }
+
+    .modal-close:focus-visible {
+      outline: 2px solid var(--cta);
+      outline-offset: 2px;
     }
 
     .report-section {
@@ -673,6 +752,242 @@
       font-size: 14px;
     }
 
+    /* Skeleton Loading */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 4px;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(3, 105, 161, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(3, 105, 161, 0.6); }
+    }
+
+    @keyframes gradient-shift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    @keyframes particle-float {
+      0%, 100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% {
+        transform: translateY(-100vh) translateX(50px);
+        opacity: 0;
+      }
+    }
+
+    /* Animations */
+    .animate-fade-in-up {
+      animation: fadeInUp 0.6s ease-out forwards;
+      opacity: 0;
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+      opacity: 0;
+    }
+
+    .animate-float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .animate-pulse-glow {
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    /* Stagger delays */
+    .stagger-1 { animation-delay: 0.1s; }
+    .stagger-2 { animation-delay: 0.2s; }
+    .stagger-3 { animation-delay: 0.3s; }
+    .stagger-4 { animation-delay: 0.4s; }
+
+    /* Hero Section enhancements */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--cta) 0%, var(--primary) 100%);
+      background-size: 200% 200%;
+      animation: gradient-shift 8s ease infinite;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      opacity: 0.5;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 50%;
+      animation: particle-float 10s infinite;
+    }
+
+    /* Card enhancements */
+    .stat-card {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .stat-card:hover::before {
+      opacity: 1;
+    }
+
+    .stat-card:hover {
+      transform: scale(1.05);
+      border-color: rgba(255,255,255,0.3);
+    }
+
+    .industry-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .industry-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.15);
+    }
+
+    .factory-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .factory-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+    }
+
+    /* Button shine effect */
+    .btn {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::after {
+      left: 100%;
+    }
+
+    .report-btn {
+      position: relative;
+      overflow: hidden;
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+
+    .report-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .report-btn:hover::before {
+      opacity: 1;
+    }
+
+    /* Modal enhancements */
+    .modal {
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-content {
+      animation: fadeInUp 0.3s ease-out;
+    }
+
+    .skeleton-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      border: 1px solid var(--border);
+    }
+
+    .skeleton-title {
+      height: 20px;
+      width: 60%;
+      margin-bottom: var(--space-md);
+    }
+
+    .skeleton-text {
+      height: 16px;
+      width: 100%;
+      margin-bottom: var(--space-sm);
+    }
+
+    .skeleton-text.short {
+      width: 40%;
+    }
+
+    .skeleton-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: var(--space-md);
+    }
+
+    .skeleton-item {
+      height: 120px;
+    }
+
     /* Loading & Empty States */
     .loading,
     .empty {
@@ -682,9 +997,34 @@
     }
 
     .empty-icon {
-      font-size: 64px;
-      margin-bottom: var(--space-md);
-      opacity: 0.5;
+      width: 80px;
+      height: 80px;
+      margin: 0 auto var(--space-md);
+      color: var(--text-tertiary);
+    }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--border);
+      border-top-color: var(--cta);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto var(--space-md);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* SVG Icons */
+    .icon {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      stroke-width: 0;
+      stroke: currentColor;
+      fill: currentColor;
     }
 
     /* Responsive */
@@ -708,10 +1048,12 @@
 
       .industry-card {
         padding: var(--space-sm);
+        min-height: 100px;
       }
 
       .industry-icon {
-        font-size: 28px;
+        width: 32px;
+        height: 32px;
       }
 
       .factory-grid {
@@ -726,6 +1068,28 @@
         width: 56px;
         height: 56px;
         font-size: 11px;
+      }
+    }
+
+    /* Dark Mode Support */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-primary: #1e293b;
+        --bg-secondary: #0f172a;
+        --bg-tertiary: #334155;
+        --text-primary: #f1f5f9;
+        --text-secondary: #94a3b8;
+        --text-tertiary: #64748b;
+        --border: #334155;
+        --border-light: #1e293b;
+      }
+
+      .search-input {
+        background: var(--bg-tertiary);
+      }
+
+      .search-input:focus {
+        background: var(--bg-primary);
       }
     }
   </style>
@@ -747,82 +1111,160 @@
   <!-- Main Content -->
   <main class="container">
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="heroSection">
       <div class="hero-content">
-        <h2>助力中国工厂开拓全球市场</h2>
-        <p>实时追踪 TikTok 各地区行业热点，分析出口潜力，辅助您的业务决策</p>
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-label">覆盖地区</div>
+        <div class="animate-fade-in-up">
+          <span style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 9999px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.9); font-size: 14px; font-weight: 500; margin-bottom: 16px; backdrop-filter: blur(4px);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #fbbf24;">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            实时数据驱动决策
+          </span>
+        </div>
+
+        <h2 class="animate-fade-in-up stagger-1" style="font-size: clamp(28px, 5vw, 48px); font-weight: 700; margin-bottom: 16px; line-height: 1.2;">
+          助力中国工厂
+          <br />
+          <span style="color: hsl(199, 89%, 65%);">开拓全球市场</span>
+        </h2>
+
+        <p class="animate-fade-in-up stagger-2" style="font-size: clamp(14px, 2vw, 18px); opacity: 0.95; margin-bottom: 32px; line-height: 1.6;">
+          实时追踪 TikTok 各地区行业热点，分析出口潜力，辅助您的业务决策。
+          数据驱动，精准定位，让每一份投入都物超所值。
+        </p>
+
+        <div class="stats-grid animate-fade-in-up stagger-3">
+          <div class="stat-card" style="animation-delay: 0.4s;">
+            <div style="display: flex; align-items: center; gap: 6px; opacity: 0.9; font-size: 13px; margin-bottom: 4px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+              覆盖地区
+            </div>
             <div class="stat-value">4</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">行业分类</div>
+          <div class="stat-card" style="animation-delay: 0.5s;">
+            <div style="display: flex; align-items: center; gap: 6px; opacity: 0.9; font-size: 13px; margin-bottom: 4px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+              </svg>
+              行业分类
+            </div>
             <div class="stat-value">8</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">工厂数据</div>
+          <div class="stat-card" style="animation-delay: 0.6s;">
+            <div style="display: flex; align-items: center; gap: 6px; opacity: 0.9; font-size: 13px; margin-bottom: 4px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+              工厂数据
+            </div>
             <div class="stat-value">640+</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">每周更新</div>
+          <div class="stat-card" style="animation-delay: 0.7s;">
+            <div style="display: flex; align-items: center; gap: 6px; opacity: 0.9; font-size: 13px; margin-bottom: 4px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #fbbf24;">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              每周更新
+            </div>
             <div class="stat-value">实时</div>
           </div>
         </div>
       </div>
+      <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 96px; background: linear-gradient(to top, var(--bg-secondary), transparent);"></div>
     </section>
 
     <!-- Search Section -->
     <section class="section">
       <div class="search-container">
-        <input type="text" class="search-input" id="searchInput" placeholder="搜索行业：纺织、电子、机械、化工...">
+        <input type="text" class="search-input" id="searchInput" placeholder="搜索行业：纺织、电子、机械、化工..." aria-label="搜索行业">
         <button class="btn" onclick="handleSearch()">搜索</button>
       </div>
 
-      <div class="section-title" style="margin-bottom: 16px;">选择行业</div>
-      <div class="industry-grid" id="industryGrid">
-        <div class="loading">加载中...</div>
+      <div class="section-title" style="margin-bottom: 16px;">
+        <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+        </svg>
+        选择行业
+      </div>
+      <div class="industry-grid" id="industryGrid" role="listbox" aria-label="选择行业">
+        <div class="loading" aria-live="polite">
+          <div class="loading-spinner"></div>
+          <div>加载中...</div>
+        </div>
       </div>
     </section>
 
     <!-- Overview Section -->
-    <section class="section" id="overviewSection" style="display: none;">
+    <section class="section" id="overviewSection" style="display: none;" aria-live="polite">
       <div class="section-header">
-        <h3 class="section-title"><span id="overviewTitle"></span> 出口概况</h3>
+        <h3 class="section-title">
+          <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3v18h18"></path>
+            <path d="M18 17V9"></path>
+            <path d="M13 17V5"></path>
+            <path d="M8 17v-3"></path>
+          </svg>
+          <span id="overviewTitle"></span> 出口概况
+        </h3>
       </div>
       <div class="overview-grid" id="overviewGrid"></div>
     </section>
 
     <!-- Factory Section -->
-    <section class="section" id="factorySection" style="display: none;">
+    <section class="section" id="factorySection" style="display: none;" aria-live="polite">
       <div class="section-header">
-        <h3 class="section-title">优质工厂推荐 <span id="factoryCount" style="font-size: 14px; color: var(--text-tertiary); font-weight: 400;"></span></h3>
+        <h3 class="section-title">
+          <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+          优质工厂推荐
+          <span id="factoryCount" style="font-size: 14px; color: var(--text-tertiary); font-weight: 400; margin-left: 8px;"></span>
+        </h3>
       </div>
-      <div class="factory-grid" id="factoryGrid"></div>
+      <div class="factory-grid" id="factoryGrid" role="list"></div>
     </section>
 
     <!-- Hot Products Section -->
-    <section class="section" id="hotProductSection" style="display: none;">
+    <section class="section" id="hotProductSection" style="display: none;" aria-live="polite">
       <div class="section-header">
-        <h3 class="section-title">行业爆款产品</h3>
+        <h3 class="section-title">
+          <svg class="section-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12.23 2.39a.75.75 0 0 1 1.06 0c1.34 1.34 2.65 2.76 3.6 4.24.93 1.44 1.6 2.96 1.6 4.5 0 3.77-3.02 6.87-6.77 6.87a6.82 6.82 0 01-6.77-6.87c0-1.54.67-3.06 1.6-4.5.95-1.48 2.26-2.9 3.6-4.24a.75.75 0 01.08-.08z"></path>
+          </svg>
+          行业爆款产品
+        </h3>
       </div>
-      <div class="hot-products-grid" id="hotProductGrid"></div>
+      <div class="hot-products-grid" id="hotProductGrid" role="list"></div>
     </section>
   </main>
 
   <!-- Report Button -->
-  <div class="report-btn" onclick="showWeeklyReport()">
-    每周<br>报告
+  <div class="report-btn" onclick="showWeeklyReport()" role="button" tabindex="0" aria-label="查看每周报告" onkeypress="if(event.key==='Enter')showWeeklyReport()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 3v18h18"></path>
+      <path d="M18 17V9"></path>
+      <path d="M13 17V5"></path>
+      <path d="M8 17v-3"></path>
+    </svg>
+    <div style="font-size: 10px; margin-top: 2px;">每周报告</div>
   </div>
 
   <!-- Report Modal -->
-  <div class="modal" id="reportModal">
+  <div class="modal" id="reportModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title">每周市场报告</h3>
-        <button class="modal-close" onclick="closeModal()">&times;</button>
+        <h3 class="modal-title" id="modalTitle">每周市场报告</h3>
+        <button class="modal-close" onclick="closeModal()" aria-label="关闭">&times;</button>
       </div>
-      <div id="reportContent"></div>
+      <div id="reportContent" role="document"></div>
     </div>
   </div>
 
@@ -831,8 +1273,25 @@
     let currentIndustry = '';
     let industries = [];
 
+    // Initialize particles
+    function initParticles() {
+      const hero = document.getElementById('heroSection');
+      if (!hero) return;
+
+      for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.animationDelay = `${Math.random() * 10}s`;
+        particle.style.animationDuration = `${10 + Math.random() * 10}s`;
+        hero.appendChild(particle);
+      }
+    }
+
     // Initialize
     async function init() {
+      initParticles();
+
       try {
         const res = await fetch(`${API_BASE}/hot/industries`);
         const data = await res.json();
@@ -843,7 +1302,16 @@
         }
       } catch (error) {
         console.error('加载失败:', error);
-        document.getElementById('industryGrid').innerHTML = '<div class="empty">加载失败，请确保后端服务已启动</div>';
+        document.getElementById('industryGrid').innerHTML = `
+          <div class="empty">
+            <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <div>加载失败，请确保后端服务已启动</div>
+          </div>
+        `;
       }
     }
 
@@ -851,7 +1319,7 @@
     function renderIndustries() {
       const grid = document.getElementById('industryGrid');
       grid.innerHTML = industries.map(ind => `
-        <div class="industry-card" onclick="selectIndustry('${ind.id}', '${ind.name}')" role="button" tabindex="0" aria-label="选择${ind.name}">
+        <div class="industry-card" onclick="selectIndustry('${ind.id}', '${ind.name}')" role="option" tabindex="0" aria-label="选择${ind.name}" onkeypress="if(event.key==='Enter')selectIndustry('${ind.id}', '${ind.name}')">
           <div class="industry-icon">${ind.icon}</div>
           <div class="industry-name">${ind.name}</div>
         </div>
@@ -892,6 +1360,10 @@
       document.getElementById('factorySection').style.display = 'block';
       document.getElementById('hotProductSection').style.display = 'block';
       document.getElementById('overviewTitle').textContent = name;
+
+      // Show loading skeleton
+      document.getElementById('overviewGrid').innerHTML = Array(4).fill('<div class="skeleton-card"><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text short"></div></div>').join('');
+      document.getElementById('factoryGrid').innerHTML = Array(4).fill('<div class="skeleton-card"><div class="skeleton" style="height:200px;margin-bottom:16px;"></div><div class="skeleton skeleton-title"></div><div class="skeleton skeleton-text"></div></div>').join('');
 
       // Load data
       await Promise.all([
@@ -965,8 +1437,8 @@
         if (data.success) {
           document.getElementById('factoryCount').textContent = `(${data.total}家)`;
           document.getElementById('factoryGrid').innerHTML = data.data.map(item => `
-            <div class="factory-card">
-              <img class="factory-image" src="${item.video.coverImage}" alt="${item.factory.name}">
+            <div class="factory-card" tabindex="0" role="listitem" aria-label="${item.factory.name}">
+              <img class="factory-image" src="${item.video.coverImage}" alt="${item.factory.name}" loading="lazy">
               <div class="factory-content">
                 <div class="factory-header">
                   <div class="factory-info">
@@ -1022,13 +1494,24 @@
 
         if (data.success && data.data.length > 0) {
           document.getElementById('hotProductGrid').innerHTML = data.data.map(item => `
-            <div class="hot-product-card">
+            <div class="hot-product-card" tabindex="0" role="listitem">
               <h4>${item.name}</h4>
               <div class="hot-product-price">${item.price}</div>
               <div class="hot-product-factory">工厂：${item.factoryName}</div>
               <div class="hot-product-stats">
-                <span>👁 ${formatNumber(item.stats.views)}</span>
-                <span>💬 ${item.stats.inquiries} 询盘</span>
+                <span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-right:4px;">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  ${formatNumber(item.stats.views)}
+                </span>
+                <span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-right:4px;">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                  ${item.stats.inquiries} 询盘
+                </span>
               </div>
             </div>
           `).join('');
@@ -1050,12 +1533,27 @@
           const report = data.data;
           document.getElementById('reportContent').innerHTML = `
             <div class="report-section">
-              <h3>📅 ${report.week}</h3>
-              ${report.highlights.map(h => `<div class="report-highlight">✨ ${h}</div>`).join('')}
+              <h3>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-right:8px;">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                ${report.week}
+              </h3>
+              ${report.highlights.map(h => `<div class="report-highlight">${h}</div>`).join('')}
             </div>
 
             <div class="report-section">
-              <h3>🌍 地区分析</h3>
+              <h3>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-right:8px;">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+                地区分析
+              </h3>
               <table class="table">
                 <thead>
                   <tr>
@@ -1079,7 +1577,12 @@
             </div>
 
             <div class="report-section">
-              <h3>🔥 本周爆款产品</h3>
+              <h3>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline-block;vertical-align:middle;margin-right:8px;">
+                  <path d="M12.23 2.39a.75.75 0 0 1 1.06 0c1.34 1.34 2.65 2.76 3.6 4.24.93 1.44 1.6 2.96 1.6 4.5 0 3.77-3.02 6.87-6.77 6.87a6.82 6.82 0 01-6.77-6.87c0-1.54.67-3.06 1.6-4.5.95-1.48 2.26-2.9 3.6-4.24a.75.75 0 01.08-.08z"></path>
+                </svg>
+                本周爆款产品
+              </h3>
               <table class="table">
                 <thead>
                   <tr>
@@ -1104,6 +1607,7 @@
           `;
 
           document.getElementById('reportModal').classList.add('active');
+          document.getElementById('modalClose')?.focus();
         }
       } catch (error) {
         console.error('加载报告失败:', error);
